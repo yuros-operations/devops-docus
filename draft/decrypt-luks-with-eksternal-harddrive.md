@@ -11,11 +11,11 @@ openssl genrsa -out /mnt/key/key_luks 4096
 ### Add key on partition
 
 ```
-cryptsetup luksAddKey /dev/nvme0n1p3 /key/key_luks
+cryptsetup luksAddKey /dev/nvme0n1p3 /mnt/key/key_luks
 ```
 
 ```
-cryptsetup luksAddKey /dev/nvme0n1p4 /key/key_luks
+cryptsetup luksAddKey /dev/nvme0n1p4 /mnt/key/key_luks
 ```
 ### copy key file to mnt
 
@@ -24,11 +24,7 @@ cp /mnt/key/key_luks /etc/cryptsetup-keys.d
 ```
 
 ```
-nvim /etc/crypttab
-```
-
-```
-
+echo "luks-$(blkid -s UUID -o value /dev/nvme0n1p3) UUID=$(blkid -s UUID -o value /dev/nvme0n1p3) /key/key_luks:UUID=$(blkid -s UUID -o value /dev/sda1) discard,keyfile-timeout=10s" >> /etc/crypttab 
 ```
 
 ```
@@ -36,7 +32,7 @@ echo "rd.luks.uuid=$(blkid -s UUID -o value /dev/nvme0n1p3) rd.luks.key=$(blkid 
 ```
 
 ```
-nvim /etc/mkinitcpio.d/defaults.conf
+nvim /etc/mkinitcpio.d/blackbird.conf
 ```
 
 ```
@@ -47,6 +43,3 @@ Module=(vfat)
 mkinitcpio -P
 ```
 
-```shell 
-reboot
-```
