@@ -28,6 +28,10 @@ echo "luks-$(blkid -s UUID -o value /dev/nvme0n1p3) UUID=$(blkid -s UUID -o valu
 ```
 
 ```
+echo "data-$(blkid -s UUID -o value /dev/nvme0n1p4) UUID=$(blkid -s UUID -o value /dev/nvme0n1p4) /key/key_luks:UUID=$(blkid -s UUID -o value /dev/sda1) discard,keyfile-timeout=10s" >> /etc/crypttab 
+```
+
+```
 echo "rd.luks.uuid=$(blkid -s UUID -o value /dev/nvme0n1p3) rd.luks.key=$(blkid -s UUID -o value /dev/nvme0n1p3)=/key/key_luks:UUID=$(blkid -s UUID -o value /dev/sda1) rd.luks.options=$(blkid -s UUID -o value /dev/nvme0n1p3)=keyfile-timeout=10s root=/dev/proc/root" > /etc/cmdline.d/01-boot.conf
 ```
 
