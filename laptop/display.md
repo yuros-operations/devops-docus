@@ -3,7 +3,7 @@
 #### installation
 
 ```
-sudo pacman -S uwsm hyprland hyprpolkitagent hypridle hyprlock xdg-desktop-portal-hyprland pipewire pipewire-pulse pipewire-jack wireplumber pavucontrol kitty qt5-wayland qt6-wayland ttf-jetbrains-mono-nerd ttf-droid btop nautilus nautilus-image-converter sushi mako waybar wofi wl-clipboard cliphist mailcap hyprshot gnome-keyring libsecret brightnessctl  --noconfirm
+sudo pacman -S uwsm hyprland hyprpolkitagent hypridle hyprlock xdg-desktop-portal-hyprland pipewire pipewire-pulse pipewire-jack wireplumber pavucontrol kitty qt5-wayland qt6-wayland ttf-jetbrains-mono-nerd ttf-droid btop nautilus nautilus-image-converter sushi mako waybar wofi wl-clipboard cliphist mailcap hyprshot gnome-keyring libsecret brightnessctl hyprpicker --noconfirm
 ```
 #### service
 
@@ -19,7 +19,7 @@ sudo systemctl --global enable hyprpolkitagent
 sudo systemctl --global enable waybar
 ```
 ```
-sudo systemctl --global enable pipewire
+sudo systemctl --global enable pipewire-pulse
 ```
 
 ### sddm
