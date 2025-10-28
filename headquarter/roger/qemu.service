@@ -1,0 +1,23 @@
+[Unit]
+Description=service for start qemu
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/qemu-system-x86_64 \
+	-enable-kvm \
+	-m 4096 \
+	-smp 2 \
+	-machine type=q35 \
+	-cpu host \
+	-device intel-iommu \
+	-drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/x64/OVMF_CODE.4m.fd \
+	-drive if=pflash,format=raw,file=/usr/share/OVMF/x64/OVMF_VARS.4m.fd \
+	-rtc base=utc \
+	-display none \
+	-net nic,model=virtio \
+	-net bridge,br=bridge \
+	-hda /var/lib/qemu/arch.qcow2 
+
+
+[Install]
+WantedBy=multi-user.target
