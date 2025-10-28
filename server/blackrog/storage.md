@@ -3,92 +3,106 @@
 | ---- | --------- | ----------------- | ----- | ----- | -------- | --------- | ------ | -------------------------- |
 | 0    | 1         | efi               | false | false | boot     | 320M      | fat 32 | /boot                      |
 | 0    | 2         | linux file system | true  | false | keys     | 512M      | luks   | none                       |
-| 0    | 3         | linux file system | true  | true  | lvm_root | 53.1G       | luks   | see logical layout point 1 |
-| 0    | 4         | linux file system | true  | true  | lvm_data | 100% Free | luks   | see logical layout point 1 |
-| -    | -         | tmpfs             | false | false | -        | -         | tmpfs  | /tmp                       |
-#### root disk group
+| 0    | 3         | linux file system | true  | true  | proc | 53G       | luks   | see logical layout point 1 |
+| 0    | 4         | linux file system | true  | true  | data | 100% Free | luks   | see logical layout point 1 |
+#### disk group
 
 | partition | list | group | name | size | mount              | format |
 | --------- | ---- | ----- | ---- | ---- | ------------------ | ------ |
-| 2         | 1    | srv   | root | 25G   | /mnt               | ext4   |
-| 2         | 2    | srv   | vars | 5G   | /mnt/var/          | ext4   |
-| 2         | 3    | srv   | vtmp | 5G | /mnt/var/tmp/      | ext4   |
-| 2         | 4    | srv   | vlog | 5G   | /mnt/var/log/      | ext4   |
-| 2         | 5    | srv   | vaud | 5G | /mnt/var/log/audit | ext4   |
-| 2         | 6    | srv   | swap | 100%FREE   | swap               | swap   |
+| 2         | 1    | proc   | root | 10G  | /mnt               | ext4   |
+| 2         | 2    | proc   | ubin | 3.5G  | /mnt/dev/swap           | ext4   |
+| 2         | 3    | proc   | temp | 2G   | /mnt/tmp               | ext4   |
+| 2         | 4   | proc   | ipcv | 2G   | /mnt/dev/shm               | ext4   |
+| 2         | 4   | proc   | vda0 | 10G   | /mnt/dev/vda0               | ext4   |
+| 2         | 5    | proc   | vars | 5G   | /mnt/var           | ext4   |
+| 2         | 6    | proc   | vlog | 2G   | /mnt/var/log/      | ext4   |
+| 2         | 7    | proc   | vaud | 512M   | /mnt/var/log/audit | ext4   |
+| 2         | 8    | proc   | vtmp | 2G | /mnt/var/tmp/      | ext4   |
+| 2         | 9    | proc   | vpac | 2G   | /mnt/var/cache/pacman | ext4|
+| 2         | 10    | proc   | ring | 512M |                     | luks   |
+| 2         | 11   | proc   | home | 5G   | /mnt/home               | ext4   |
+
 
 ## guidline
 ---
 #### disk encrypt
 ```
-cryptsetup luksFormat /dev/nvme0n1p2
+cryptsetup luksFormat --sector-size=4096 /dev/nvme0n1p2
 ```
 
 ```
-cryptsetup luksFormat /dev/nvme0n1p3
+cryptsetup luksFormat --sector-size=4096 /dev/nvme0n1p3
 ```
 
 ```
-cryptsetup luksFormat /dev/nvme0n1p4
+cryptsetup luksFormat --sector-size=4096 /dev/nvme0n1p4
 ```
 
 ```
-cryptsetup luksOpen /dev/nvme0n1p3 lvm_root
+cryptsetup luksOpen /dev/nvme0n1p3 proc
 ```
 
 ```
-cryptsetup luksOpen /dev/nvme0n1p4 lvm_data
+cryptsetup luksOpen /dev/nvme0n1p4 data
 ```
 
 #### logical volume
 system
 ```
-pvcreate /dev/mapper/lvm_root
+pvcreate /dev/mapper/proc
 ```
 
 ```
-vgcreate srv /dev/mapper/lvm_root
+vgcreate proc /dev/mapper/proc
 ```
 
 ```
-lvcreate -L 25G srv -n root
+lvcreate -L 10G proc -n root
 ```
 
 ```
-lvcreate -L 5G srv -n vars
+lvcreate -L 3.5G proc -n ubin
 ```
 
 ```
-lvcreate -L 5G srv -n vtmp
+lvcreate -L 2.5G proc -n temp
 ```
 
 ```
-lvcreate -L 5G srv -n vlog
+lvcreate -L 2G proc -n ipcv
 ```
 
 ```
-lvcreate -L 5G srv -n vaud
+lvcreate -L 10G proc -n vda0
 ```
 
 ```
-lvcreate -l 100%FREE srv -n swap
-```
-
-data
-
-```
-pvcreate /dev/mapper/lvm_data
+lvcreate -L 5G proc -n vars
 ```
 
 ```
-vgcreate data /dev/mapper/lvm_data
+lvcreate -L 5G proc -n vlog
 ```
 
 ```
-lvcreate -L 50G data -n home
+lvcreate -L 1G proc -n vaud
 ```
 
+```
+lvcreate -L 2.5G proc -n vtmp
+```
 
+```
+lvcreate -L 5G proc -n vpac
+```
+
+```
+lvcreate -L 512M proc -n ring
+```
+
+```
+lvcreate -L 5G proc -n home
+```
 
 #### storage format
 system
@@ -98,42 +112,59 @@ mkfs.vfat -F32 -S 4096 -n BOOT /dev/nvme0n1p1
 ```
 
 ```
-mkfs.ext4 -b 4096 /dev/srv/root
+mkfs.ext4 -b 4096 /dev/proc/root
 ```
 
 ```
-mkfs.ext4 -b 4096 /dev/srv/vars
+mkfs.ext4 -b 4096 /dev/proc/ubin
 ```
 
 ```
-mkfs.ext4 -b 4096 /dev/srv/vtmp
-```
-
-```
-mkfs.ext4 -b 4096 /dev/srv/vlog
-```
-
-```
-mkfs.ext4 -b 4096 /dev/srv/vaud
-```
-
-```
-mkswap /dev/srv/swap
-```
-
-data
-
-```
-mkfs.ext4 -b 4096 /dev/data/home
+mkfs.ext4 -b 4096 /dev/proc/temp
 ```
 
 
+```
+mkfs.ext4 -b 4096 /dev/proc/ipcv
+```
+
+```
+mkfs.ext4 -b 4096 /dev/proc/vda0
+```
+
+```
+mkfs.ext4 -b 4096 /dev/proc/vars
+```
+
+```
+mkfs.ext4 -b 4096 /dev/proc/vlog
+```
+
+```
+mkfs.ext4 -b 4096 /dev/proc/vaud
+```
+
+```
+mkfs.ext4 -b 4096 /dev/proc/vtmp
+```
+
+```
+mkfs.ext4 -b 4096 /dev/proc/vpac
+```
+
+```
+cryptsetup luksFormat --sector-size=4096 /dev/proc/ring
+```
+
+```
+mkfs.ext4 -b 4096 /dev/proc/home
+```
 
 #### mount partition
 
 root
 ```
-mount /dev/srv/root /mnt
+mount /dev/proc/root /mnt
 ```
 
 boot
@@ -145,22 +176,48 @@ mkdir /mnt/boot
 mount -o uid=0,gid=0,fmask=0077,dmask=0077 /dev/nvme0n1p1 /mnt/boot
 ```
 
+ubin
+```
+mkdir /mnt/dev
+```
+```
+mkdir /mnt/dev/swap
+```
+```
+mount -o rw,nodev,nosuid,relatime /dev/proc/ubin /mnt/dev/swap
+```
+
+temp
+```
+mkdir /mnt/tmp
+```
+```
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/temp /mnt/tmp
+```
+
+ipcv
+```
+mkdir /mnt/dev/shm
+```
+```
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/ipcv /mnt/dev/shm
+```
+
+vda0
+```
+mkdir /mnt/dev/vda0
+```
+```
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vda0 /mnt/dev/vda0
+```
+
 var
 ```
 mkdir /mnt/var
 ```
 
 ```
-mount -o rw,nodev,noexec,nosuid,relatime /dev/srv/vars /mnt/var
-```
-
-vtmp
-```
-mkdir /mnt/var/tmp
-```
-
-```
-mount -o rw,nodev,noexec,nosuid,relatime /dev/srv/vtmp /mnt/var/tmp
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vars /mnt/var
 ```
 
 vlog
@@ -169,21 +226,37 @@ mkdir /mnt/var/log
 ```
 
 ```
-mount -o rw,nodev,noexec,nosuid,relatime /dev/srv/vlog /mnt/var/log
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vlog /mnt/var/log
 ```
 
 vaud
 ```
 mkdir /mnt/var/log/audit
 ```
+```
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vaud /mnt/var/log/audit
+```
+
+vtmp
+```
+mkdir /mnt/var/tmp
+```
 
 ```
-mount -o rw,nodev,noexec,nosuid,relatime /dev/srv/vaud /mnt/var/log/audit
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vtmp /mnt/var/tmp
 ```
 
-swap
+vpac
 ```
-swapon /dev/srv/swap
+mkdir /mnt/var/cache
+```
+
+```
+mkdir /mnt/var/cache/pacman
+```
+
+```
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vpac /mnt/var/cache/pacman
 ```
 
 home
@@ -192,5 +265,5 @@ mkdir /mnt/home
 ```
 
 ```
-mount /dev/data/home /mnt/home
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/home /mnt/home
 ```
