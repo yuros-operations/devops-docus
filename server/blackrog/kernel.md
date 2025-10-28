@@ -61,11 +61,14 @@ touch /etc/cmdline.d/{01-boot.conf,02-mods.conf,03-secs.conf,04-perf.conf,05-mis
 ```
 
 ```
-echo "cryptdevice=UUID=$(blkid -s UUID -o value /dev/nvme0n1p3):lvm_root root=/dev/srv/root" > /etc/cmdline.d/01-boot.conf
+echo "cryptdevice=UUID=$(blkid -s UUID -o value /dev/nvme0n1p3):proc root=/dev/proc/root" > /etc/cmdline.d/01-boot.conf
 ```
 
 ```
 echo "data UUID=$(blkid -s UUID -o value /dev/nvme0n1p4) none" >> /etc/crypttab
+```
+```
+echo "ipv6.disable=1" > /etc/cmdline.d/04-perf.conf
 ```
 
 ```
