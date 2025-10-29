@@ -7,6 +7,9 @@ pacman -S firewalld --noconfirm
 ```
 systemctl enable firewalld
 ```
+## after instalation
+
+
 #### configuration
 ```
 sudo firewall-cmd --zone=work --remove-service={dhcpv6-client,ssh} --permanent
@@ -38,8 +41,6 @@ sudo firewall-cmd --zone=public --add-interface=nama_driver_wifi --permanent
 ```
 sudo firewall-cmd --reload
 ```
-
-## after instalation
 
 ### apparmor
 #### instalation
