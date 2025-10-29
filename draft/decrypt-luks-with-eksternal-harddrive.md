@@ -30,7 +30,6 @@ cp /mnt/key/key_luks /etc/cryptsetup-keys.d
 ```
 echo "luks-$(blkid -s UUID -o value /dev/nvme0n1p3) UUID=$(blkid -s UUID -o value /dev/nvme0n1p3) /key/key_luks:UUID=$(blkid -s UUID -o value /dev/sda1) discard,keyfile-timeout=10s" >> /etc/crypttab 
 ```
-
 ```
 echo "data-$(blkid -s UUID -o value /dev/nvme0n1p4) UUID=$(blkid -s UUID -o value /dev/nvme0n1p4) /key/key_luks:UUID=$(blkid -s UUID -o value /dev/sda1) discard,keyfile-timeout=10s" >> /etc/crypttab 
 ```
