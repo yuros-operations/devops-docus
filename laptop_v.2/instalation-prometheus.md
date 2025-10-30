@@ -21,9 +21,12 @@ sudo systemctl start prometheus-node-exporter.service
 ```
 
 ### configuration
+```
+sudo cp /etc/prometheus/prometheus.yaml /etc/prometheus/prometheus.yaml.bck
+```
 
 ```
-nsudo nvim /etc/prometheus/prometheus.yaml
+sudo nvim /etc/prometheus/prometheus.yaml
 ```
 
 ```
