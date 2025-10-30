@@ -22,7 +22,11 @@ sudo systemctl start prometheus-node-exporter.service
 
 ### configuration
 ```
-sudo cp /etc/prometheus/prometheus.yaml /etc/prometheus/prometheus.yaml.bck
+cd /etc/prometheus
+```
+
+```
+sudo cp prometheus.yaml prometheus.yaml.bck
 ```
 
 ```
