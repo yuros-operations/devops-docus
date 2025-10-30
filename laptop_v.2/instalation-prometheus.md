@@ -19,6 +19,9 @@ sudo systemctl enable prometheus-node-exporter.service
 ```
 sudo systemctl start prometheus-node-exporter.service
 ```
+```
+sudo systemctl stop firewalld
+```
 
 ### configuration
 ```
