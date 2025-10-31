@@ -30,7 +30,7 @@ sudo firewall-cmd --zone=external --remove-service=ssh --permanent
 sudo firewall-cmd --zone=dmz --remove-service=ssh --permanent
 ```
 ```
-sudo firewall-cmd --zone=internal --add-service={http,https} --permanent
+sudo firewall-cmd --zone=internal --add-service={http,https,ssh} --permanent
 ```
 ```
 sudo firewall-cmd --zone=internal --add-interface=nama_driver_ethernet --permanent
