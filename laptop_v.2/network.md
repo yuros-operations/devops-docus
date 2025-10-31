@@ -92,6 +92,31 @@ kernel.deny_new_usb=1
 #disable coredum
 kernel.core_pattern=|/bin/false
 ```
+#### timesync
+```
+sudo mkdir /etc/systemd/timesyncd.conf.d
+```
+```
+sudo nvim /etc/systemd/timesyncd.conf.d/local.conf
+```
+```
+[Time]
+NTP=0.id.pool.ntp.org 1.id.pool.ntp.org 2.id.pool.ntp.org 3.id.pool.ntp.org
+FallbackNTP=time.cloudflare.com time.google.com time.aws.com
+```
+```
+sudo timedatectl set-ntp true
+```
+```
+sudo timedatectl status
+```
+```
+sudo timedatectl show-timesync --all
+```
+```
+sudo systemctl enable systemd-timesyncd.service
+```
+
 #### sleep
 ```
 sudo mkdir -p /etc/systemd/sleep.conf.d/
