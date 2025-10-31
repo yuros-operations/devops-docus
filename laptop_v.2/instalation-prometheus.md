@@ -29,13 +29,14 @@ cd /etc/prometheus
 ```
 
 ```
-sudo cp prometheus.yaml prometheus.yaml.bck
+sudo cp prometheus.yml prometheus.yml.bck
 ```
 
 ```
-sudo nvim /etc/prometheus/prometheus.yaml
+sudo nvim /etc/prometheus/prometheus.yml
 ```
 
+tambahkan ke paling bawah
 ```
 scrape_configs:
    - job_name: 'prometheus'
