@@ -388,6 +388,26 @@ mkdir /boot/kernel
 ```
 mv /boot/amd-ucode.img /boot/vmlinuz-linux-hardened /boot/kernel
 ```
+### configure kernel parameter
+
+```
+mkdir /etc/cmdline.d
+```
+```
+touch /etc/cmdline.d/{01-boot.conf,02-mods.conf,03-secs.conf,04-perf.conf,05-nets.conf,06-misc.conf}
+```
+```
+echo "cryptdevice=UUID=$(blkid -s UUID -o value /dev/nvme0n1p3):proc root=/dev/proc/root" > /etc/cmdline.d/01-boot.conf
+```
+```
+echo "data UUID=$(blkid -s UUID -o value /dev/nvme0n1p4) none" >> /etc/crypttab
+```
+```
+echo "ipv6.disable=1" > /etc/cmdline.d/04-perf.conf
+```
+```
+echo "rw quiet" > /etc/cmdline.d/06-misc.conf
+```
 
 ### initram directory
 
@@ -413,28 +433,7 @@ tambahkan pada bagian binaries
 /usr/bin/curl
 ```
 
-### configure kernel parameter
-
-```
-mkdir /etc/cmdline.d
-```
-```
-touch /etc/cmdline.d/{01-boot.conf,02-mods.conf,03-secs.conf,04-perf.conf,05-nets.conf,06-misc.conf}
-```
-```
-echo "cryptdevice=UUID=$(blkid -s UUID -o value /dev/nvme0n1p3):proc root=/dev/proc/root" > /etc/cmdline.d/01-boot.conf
-```
-```
-echo "data UUID=$(blkid -s UUID -o value /dev/nvme0n1p4) none" >> /etc/crypttab
-```
-```
-echo "ipv6.disable=1" > /etc/cmdline.d/04-perf.conf
-```
-```
-echo "rw quiet" > /etc/cmdline.d/06-misc.conf
-```
-
-### configure linux preset
+#### configure linux preset
 
 ```
 nvim /etc/mkinitcpio.d/linux-hardened.preset
