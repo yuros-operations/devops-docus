@@ -403,9 +403,6 @@ nvim /etc/systemd/system/tangd.socket.d/override.conf
 ListenStream=
 ListenStream=51379 
 ```
-```
-systemctl show tangd.socket -p Listen
-```
 
 ### firewelld
 
@@ -432,7 +429,7 @@ nvim /usr/lib/firewalld/zones/public.xml
 
 delete semua service selain ssh,dan tamahkan
 ```
-  <port protocol="tcp" port="8080-8085"/>
+  <port protocol="tcp" port="51379"/>
 ```
 dibawah
 ```
@@ -620,4 +617,11 @@ RouteMetric=100
 
 [IPv6AcceptRA]
 RouteMetric=100" 
+```
+### recovery
+```
+curl --output recovery.efi https://boot.netboot.xyz/ipxe/netboot.xyz.efi
+```
+```
+mv recovery.efi /boot/efi/rescue/
 ```
