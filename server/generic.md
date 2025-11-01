@@ -1,3 +1,5 @@
+# 1. Partitioning
+
 ### physical volume
 | disk | partition | type              | luks  | lvm   | label    | size      | format | mount                      |
 | ---- | --------- | ----------------- | ----- | ----- | -------- | --------- | ------ | -------------------------- |
