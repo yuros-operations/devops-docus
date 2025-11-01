@@ -540,5 +540,29 @@ tambahkan
 Bridge=bridge
 ```
 ```
-nvim 
+nvim /etc/systemd/network/10-bridge.netdev
+```
+```
+Name=bridge
+Kind=bridge
+```
+```
+nvim /etc/systemd/network/30-bridge.network
+```
+```
+[Match]
+Name=bridge
+
+[Link]
+RequiredForOnline=routable
+
+[Network]
+Address=(ip address)/24
+Gateway=10.10.1.1
+
+[DHCPv4]
+RouteMetric=100
+
+[IPv6AcceptRA]
+RouteMetric=100" 
 ```
