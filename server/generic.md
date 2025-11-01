@@ -316,19 +316,19 @@ cat /etc/locale.conf
 ### user
 
 ```
-echo 'loki ALL=(ALL:ALL) ALL' > /etc/sudoers.d/00_lektor
+echo 'loki ALL=(ALL:ALL) ALL' > /etc/sudoers.d/00_loki
 ```
 
 ```
-useradd -m lektor
+useradd -m loki
 ```
 
 ```
-usermod -aG wheel lektor
+usermod -aG wheel loki
 ```
 
 ```
-echo "1511" | passwd lektor --stdin
+echo "1511" | passwd loki --stdin
 ```
 
 ```
