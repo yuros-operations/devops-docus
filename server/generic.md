@@ -219,4 +219,7 @@ mkdir /mnt/home
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/home /mnt/home
 ```
-
+# 2.packages
+```
+pacstrap /mnt linux-hardened linux-firmware mkinitcpio intel-ucode tang clevis mkinitcpio-nfs-utils libpwquality luksmeta git --noconfirm
+```
