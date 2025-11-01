@@ -312,6 +312,16 @@ sed -i '1s/.*/LANG=en_US.UTF-8/' /etc/locale.conf
 ```
 cat /etc/locale.conf
 ```
+```
+touch /etc/vconsole.conf
+```
+```
+nvim /etc/vconsole.conf
+```
+```
+FONT=lat2-16
+FONT_MAP=8859-2
+```
 
 ### user
 ```
@@ -452,9 +462,6 @@ PRESETS=('default')
 default_uki="/boot/efi/linux/blackbird-hardened.efi"
 ```
 
-```
-touch /etc/vconsole.conf
-```
 ### generate efi files
 
 ```
