@@ -1,8 +1,8 @@
 # 1. Partitioning
 
-## disk layout
+## physical volume
 
-#### physical volume
+### disk layout
 | disk | partition | type              | luks  | lvm   | label    | size      | format | mount                      |
 | ---- | --------- | ----------------- | ----- | ----- | -------- | --------- | ------ | -------------------------- |
 | 0    | 1         | efi               | false | false | boot     | 320M      | fat 32 | /boot                      |
@@ -10,24 +10,7 @@
 | 0    | 3         | linux file system | true  | true  | proc     | 22G       | luks   | see logical layout point 1 |
 | 0    | 4         | linux server data | true  | true  | data     | 100% Free | luks   | see logical layout point 1 |
 
-
-#### disk group
-| partition | list | group  | name | size | mount                 | format |
-| --------- | ---- | ------ | ---- | ---- | --------------------- | ------ |
-| 2         | 1    | proc   | root | 5G   | /mnt                  | ext4   |
-| 2         | 3    | proc   | temp | 2G   | /mnt/tmp              | ext4   |
-| 2         | 5    | proc   | vars | 3G   | /mnt/var              | ext4   |
-| 2         | 2    | proc   | libs | 2G   | /mnt/var/usr/         | ext4   |
-| 2         | 2    | proc   | game | 1G   | /mnt/var/games/       | ext4   |
-| 2         | 6    | proc   | vlog | 2G   | /mnt/var/log/         | ext4   |
-| 2         | 7    | proc   | vaud | 1G   | /mnt/var/log/audit    | ext4   |
-| 2         | 8    | proc   | vtmp | 512M | /mnt/var/tmp/         | ext4   |
-| 2         | 9    | proc   | vpac | 2G   | /mnt/var/cache/pacman | ext4   |
-| 2         | 10   | proc   | ring | 512M |                       | luks   |
-| 2         | 11   | proc   | home | 100% | /mnt/home             | ext4   |
-
-
-## procedure
+gunakan cfdisk untuk membuat physical volume sesuai dengan guide line
 
 ### disk encryption
 ```
@@ -50,7 +33,22 @@ cryptsetup luksOpen /dev/nvme0n1p3 proc
 cryptsetup luksOpen /dev/nvme0n1p4 data
 ```
 
-### logical volume
+## logical volume
+
+### disk layout
+| partition | list | group  | name | size | mount                 | format |
+| --------- | ---- | ------ | ---- | ---- | --------------------- | ------ |
+| 2         | 1    | proc   | root | 5G   | /mnt                  | ext4   |
+| 2         | 3    | proc   | temp | 2G   | /mnt/tmp              | ext4   |
+| 2         | 5    | proc   | vars | 3G   | /mnt/var              | ext4   |
+| 2         | 2    | proc   | libs | 2G   | /mnt/var/usr/         | ext4   |
+| 2         | 2    | proc   | game | 1G   | /mnt/var/games/       | ext4   |
+| 2         | 6    | proc   | vlog | 2G   | /mnt/var/log/         | ext4   |
+| 2         | 7    | proc   | vaud | 1G   | /mnt/var/log/audit    | ext4   |
+| 2         | 8    | proc   | vtmp | 512M | /mnt/var/tmp/         | ext4   |
+| 2         | 9    | proc   | vpac | 2G   | /mnt/var/cache/pacman | ext4   |
+| 2         | 10   | proc   | ring | 512M |                       | luks   |
+| 2         | 11   | proc   | home | 100% | /mnt/home             | ext4   |
 
 ```
 pvcreate /dev/mapper/proc
@@ -103,9 +101,9 @@ lvcreate -L 512M proc -n ring
 ```
 lvcreate -l100%FREE proc -n home
 ```
-### preparation
+## preparation
 
-#### root
+### root
 
 ```
 mkfs.ext4 -b 4096 /dev/proc/root
@@ -114,7 +112,7 @@ mkfs.ext4 -b 4096 /dev/proc/root
 mount /dev/proc/root /mnt
 ```
 
-#### boot
+### boot
 ```
 mkfs.vfat -F32 -S 4096 -n BOOT /dev/nvme0n1p1
 ```
@@ -125,7 +123,7 @@ mkdir /mnt/boot
 mount -o uid=0,gid=0,fmask=0077,dmask=0077 /dev/nvme0n1p1 /mnt/boot
 ```
 
-#### temp
+### temp
 ```
 mkfs.ext4 -b 4096 /dev/proc/temp
 ```
@@ -136,7 +134,7 @@ mkdir /mnt/tmp
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/temp /mnt/tmp
 ```
 
-#### vars
+### vars
 ```
 mkfs.ext4 -b 4096 /dev/proc/vars
 ```
@@ -147,7 +145,7 @@ mkdir /mnt/var
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vars /mnt/var
 ```
 
-#### libs
+### libs
 ```
 mkfs.ext4 -b 4096 /dev/proc/libs
 ```
@@ -158,7 +156,7 @@ mkdir /mnt/var/usr
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/libs /mnt/var/usr
 ```
 
-#### game
+### game
 ```
 mkfs.ext4 -b 4096 /dev/proc/game
 ```
@@ -169,7 +167,7 @@ mkdir /mnt/var/games
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/game /mnt/var/games
 ```
 
-#### vlog
+### vlog
 ```
 mkfs.ext4 -b 4096 /dev/proc/vlog
 ```
@@ -180,7 +178,7 @@ mkdir /mnt/var/log
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vlog /mnt/var/log
 ```
 
-#### vaud
+### vaud
 ```
 mkfs.ext4 -b 4096 /dev/proc/vaud
 ```
@@ -190,7 +188,7 @@ mkdir /mnt/var/log/audit
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vaud /mnt/var/log/audit
 ```
-#### vtmp
+### vtmp
 ```
 mkfs.ext4 -b 4096 /dev/proc/vtmp
 ```
@@ -200,7 +198,7 @@ mkdir /mnt/var/tmp
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vtmp /mnt/var/tmp
 ```
-#### vpac
+### vpac
 ```
 mkfs.ext4 -b 4096 /dev/proc/vpac
 ```
@@ -213,11 +211,11 @@ mkdir /mnt/var/cache/pacman
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vpac /mnt/var/cache/pacman
 ```
-#### ring
+### ring
 ```
 cryptsetup luksFormat --sector-size=4096 /dev/proc/ring
 ```
-#### home
+### home
 ```
 mkfs.ext4 -b 4096 /dev/proc/home
 ```
