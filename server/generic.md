@@ -409,6 +409,9 @@ clevis luks bind -d /dev/nvme0n1p4 tang '{"url":"http://10.10.1.10:51379"}'
 ```
 clevis luks bind -d /dev/nvme0n1p4 tang '{"url":"http://10.10.1.11:51379"}'
 ```
+```
+systemctl enable clevis-luks-askpass.path
+```
 ### tang server
 ```
 systemctl enable tangd.socket
