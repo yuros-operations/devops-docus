@@ -188,10 +188,7 @@ lvcreate -L 2G proc -n vpac
 mkfs.ext4 -b 4096 /dev/proc/vpac
 ```
 ```
-mkdir /mnt/var/cache
-```
-```
-mkdir /mnt/var/cache/pacman
+mkdir -p /mnt/var/cache /mnt/var/cache/pacman
 ```
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vpac /mnt/var/cache/pacman
