@@ -225,11 +225,11 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/home /mnt/home
 
 ## intel server
 ```
-pacstrap /mnt linux-hardened linux-firmware mkinitcpio intel-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync sudo --noconfirm
+pacstrap /mnt linux-hardened linux-firmware mkinitcpio intel-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync sudo debugedit fakeroot --noconfirm
 ```
 ## amd server
 ```
-pacstrap /mnt linux-hardened linux-firmware mkinitcpio amd-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync sudo  --noconfirm
+pacstrap /mnt linux-hardened linux-firmware mkinitcpio amd-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync sudo debugedit fakeroot  --noconfirm
 ```
 
 ## network configuration
@@ -364,15 +364,15 @@ exit
 passwd -l root
 ```
 ### hook clevis
-
 ```
-git clone https://aur.archlinux.org/mkinitcpio-clevis-hook.git
+su loki
 ```
-
+```
+git clone https://aur.archlinux.org/mkinitcpio-clevis-hook.git 
+```
 ```
 cd mkinitcpio-clevis-hook
 ```
-
 ```
 makepkg -si
 ```
@@ -505,4 +505,21 @@ fallback_options="-S autodetect"
 
 ```
 mkinitcpio -P
+```
+### bridge
+```
+rm /etc/systemd/network/20-wlan.network /etc/systemd/network/20-wwan.network
+```
+```
+nvim /etc/systemd/network/20-ethernet.network
+```
+commenting
+```
+DHCP=yes
+```
+```
+MulticastDNS=yes
+```
+tambahkan
+```
 ```
