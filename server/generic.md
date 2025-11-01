@@ -199,10 +199,10 @@ lvcreate -L 512M proc -n ring
 cryptsetup luksFormat --sector-size=4096 /dev/proc/ring
 ```
 ```
-cryptsetup luksOpen /dev/proc/ring proc_keys
+cryptsetup luksOpen /dev/proc/ring lvm_keys
 ```
 ```
-mkfs.ext4 -b 4096 /dev/proc/ring/proc_keys
+mkfs.ext4 -b 4096 /dev/mapper/lvm_keys
 ```
 ### home
 ```
