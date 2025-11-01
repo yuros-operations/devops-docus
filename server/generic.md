@@ -914,6 +914,9 @@ fallback_image="/boot/initramfs-linux-hardened-fallback.img"
 fallback_options="-S autodetect"
 ```
 ```
+bootctl --path=/boot install
+```
+```
 mkinitcpio -P
 ```
 
@@ -926,6 +929,9 @@ mv recovery.efi /boot/efi/rescue/
 ```
 ```
 printf "title recovery\nefi /efi/rescue/recovery.efi" > /boot/loader/entries/recovery.conf
+```
+```
+cat /boot/loader/entries/recovery.conf
 ```
 
 ### instrusion detection
