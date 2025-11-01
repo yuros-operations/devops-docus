@@ -481,6 +481,7 @@ edit
 ```
 PRESETS=('default' 'fallback')
 ```
+lalu menjadi
 ```
 PRESETS=('default')
 ```
