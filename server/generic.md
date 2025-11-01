@@ -220,6 +220,12 @@ mkdir /mnt/home
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/home /mnt/home
 ```
 # 2.packages
+
+## intel server
 ```
-pacstrap /mnt linux-hardened linux-firmware mkinitcpio intel-ucode tang clevis mkinitcpio-nfs-utils libpwquality luksmeta git base neovim lvm2 openssh polkit ethtool iptables-nft firewalld apparmor rsync grsync --noconfirm
+pacstrap /mnt linux-hardened linux-firmware mkinitcpio intel-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync --noconfirm
+```
+## amd server
+```
+pacstrap /mnt linux-hardened linux-firmware mkinitcpio amd-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync --noconfirm
 ```
