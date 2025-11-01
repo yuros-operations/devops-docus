@@ -388,7 +388,7 @@ mkdir /boot/kernel
 ```
 mv /boot/amd-ucode.img /boot/vmlinuz-linux-hardened /boot/kernel
 ```
-### configure kernel parameter
+### kernel parameter
 
 ```
 mkdir /etc/cmdline.d
@@ -452,6 +452,9 @@ PRESETS=('default')
 default_uki="/boot/efi/linux/blackbird-hardened.efi"
 ```
 
+```
+touch /etc/vconsole.conf
+```
 ### generate efi files
 
 ```
