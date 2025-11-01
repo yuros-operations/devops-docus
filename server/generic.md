@@ -1,6 +1,8 @@
 # 1. Partitioning
 
-### physical volume
+## disk layout
+
+#### physical volume
 | disk | partition | type              | luks  | lvm   | label    | size      | format | mount                      |
 | ---- | --------- | ----------------- | ----- | ----- | -------- | --------- | ------ | -------------------------- |
 | 0    | 1         | efi               | false | false | boot     | 320M      | fat 32 | /boot                      |
@@ -25,9 +27,9 @@
 | 2         | 11   | proc   | home | 3G   | /mnt/home             | ext4   |
 
 
-## guidline
----
-#### disk encrypt
+## procedure
+
+### disk encryption
 ```
 cryptsetup luksFormat --sector-size=4096 /dev/nvme0n1p2
 ```
@@ -48,8 +50,8 @@ cryptsetup luksOpen /dev/nvme0n1p3 proc
 cryptsetup luksOpen /dev/nvme0n1p4 data
 ```
 
-#### logical volume
-system
+### create logical volume
+
 ```
 pvcreate /dev/mapper/proc
 ```
@@ -106,9 +108,7 @@ lvcreate -L 512M proc -n ring
 lvcreate -L 5G proc -n home
 ```
 
-#### storage format
-system
-
+### format partition
 ```
 mkfs.vfat -F32 -S 4096 -n BOOT /dev/nvme0n1p1
 ```
