@@ -50,7 +50,7 @@ cryptsetup luksOpen /dev/nvme0n1p3 proc
 cryptsetup luksOpen /dev/nvme0n1p4 data
 ```
 
-### create logical volume
+### logical volume
 
 ```
 pvcreate /dev/mapper/proc
