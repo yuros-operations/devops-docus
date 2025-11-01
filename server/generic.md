@@ -937,6 +937,12 @@ cat /boot/loader/entries/recovery.conf
 ### instrusion detection
 
 ```
+su loki
+```
+```
+cd /tmp
+```
+```
 pkg-config --libs --cflags glib-2.0
 ```
 ```
