@@ -406,9 +406,6 @@ ListenStream=51379
 ```
 systemctl show tangd.socket -p Listen
 ```
-```
-systemctl restart tangd.socket
-```
 
 ### boot directory
 #### intel server
