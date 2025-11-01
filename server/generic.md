@@ -15,10 +15,10 @@
 | partition | list | group  | name | size | mount                 | format |
 | --------- | ---- | ------ | ---- | ---- | --------------------- | ------ |
 | 2         | 1    | proc   | root | 5G   | /mnt                  | ext4   |
-| 2         | 2    | proc   | libs | 2G   | /mnt/var/usr/         | ext4   |
-| 2         | 2    | proc   | game | 1G   | /mnt/var/games/       | ext4   |
 | 2         | 3    | proc   | temp | 2G   | /mnt/tmp              | ext4   |
 | 2         | 5    | proc   | vars | 3G   | /mnt/var              | ext4   |
+| 2         | 2    | proc   | libs | 2G   | /mnt/var/usr/         | ext4   |
+| 2         | 2    | proc   | game | 1G   | /mnt/var/games/       | ext4   |
 | 2         | 6    | proc   | vlog | 2G   | /mnt/var/log/         | ext4   |
 | 2         | 7    | proc   | vaud | 1G   | /mnt/var/log/audit    | ext4   |
 | 2         | 8    | proc   | vtmp | 512M | /mnt/var/tmp/         | ext4   |
