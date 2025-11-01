@@ -61,31 +61,27 @@ vgcreate proc /dev/mapper/proc
 ```
 
 ```
-lvcreate -L 10G proc -n root
+lvcreate -L 5G proc -n root
 ```
 
 ```
-lvcreate -L 3.5G proc -n ubin
+lvcreate -L 2G proc -n libs
 ```
 
 ```
-lvcreate -L 2.5G proc -n temp
+lvcreate -L 1G proc -n game
 ```
 
 ```
-lvcreate -L 2G proc -n ipcv
+lvcreate -L 2G proc -n temp
 ```
 
 ```
-lvcreate -L 10G proc -n vda0
+lvcreate -L 3G proc -n vars
 ```
 
 ```
-lvcreate -L 5G proc -n vars
-```
-
-```
-lvcreate -L 5G proc -n vlog
+lvcreate -L 2G proc -n vlog
 ```
 
 ```
@@ -93,11 +89,11 @@ lvcreate -L 1G proc -n vaud
 ```
 
 ```
-lvcreate -L 2.5G proc -n vtmp
+lvcreate -L 512M proc -n vtmp
 ```
 
 ```
-lvcreate -L 5G proc -n vpac
+lvcreate -L 2G proc -n vpac
 ```
 
 ```
@@ -105,9 +101,8 @@ lvcreate -L 512M proc -n ring
 ```
 
 ```
-lvcreate -L 5G proc -n home
+lvcreate -l100%FREE proc -n home
 ```
-
 ### preparation
 
 #### root
@@ -115,97 +110,25 @@ lvcreate -L 5G proc -n home
 ```
 mkfs.ext4 -b 4096 /dev/proc/root
 ```
+```
+mount /dev/proc/root /mnt
+```
 
 #### boot
 ```
 mkfs.vfat -F32 -S 4096 -n BOOT /dev/nvme0n1p1
+```
+```
+mkdir /mnt/boot
+```
+```
+mount -o uid=0,gid=0,fmask=0077,dmask=0077 /dev/nvme0n1p1 /mnt/boot
 ```
 
 #### temp
 ```
 mkfs.ext4 -b 4096 /dev/proc/temp
 ```
-
-#### vars
-```
-mkfs.ext4 -b 4096 /dev/proc/vars
-```
-
-#### libs
-
-
-
-```
-mkfs.ext4 -b 4096 /dev/proc/ubin
-```
-
-```
-mkfs.ext4 -b 4096 /dev/proc/temp
-```
-
-
-```
-mkfs.ext4 -b 4096 /dev/proc/ipcv
-```
-
-```
-mkfs.ext4 -b 4096 /dev/proc/vda0
-```
-
-
-
-```
-mkfs.ext4 -b 4096 /dev/proc/vlog
-```
-
-```
-mkfs.ext4 -b 4096 /dev/proc/vaud
-```
-
-```
-mkfs.ext4 -b 4096 /dev/proc/vtmp
-```
-
-```
-mkfs.ext4 -b 4096 /dev/proc/vpac
-```
-
-```
-cryptsetup luksFormat --sector-size=4096 /dev/proc/ring
-```
-
-```
-mkfs.ext4 -b 4096 /dev/proc/home
-```
-
-#### mount partition
-
-root
-```
-mount /dev/proc/root /mnt
-```
-
-boot
-```
-mkdir /mnt/boot
-```
-
-```
-mount -o uid=0,gid=0,fmask=0077,dmask=0077 /dev/nvme0n1p1 /mnt/boot
-```
-
-ubin
-```
-mkdir /mnt/dev
-```
-```
-mkdir /mnt/dev/swap
-```
-```
-mount -o rw,nodev,nosuid,relatime /dev/proc/ubin /mnt/dev/swap
-```
-
-temp
 ```
 mkdir /mnt/tmp
 ```
@@ -213,75 +136,94 @@ mkdir /mnt/tmp
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/temp /mnt/tmp
 ```
 
-ipcv
+#### vars
 ```
-mkdir /mnt/dev/shm
+mkfs.ext4 -b 4096 /dev/proc/vars
 ```
-```
-mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/ipcv /mnt/dev/shm
-```
-
-vda0
-```
-mkdir /mnt/dev/vda0
-```
-```
-mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vda0 /mnt/dev/vda0
-```
-
-var
 ```
 mkdir /mnt/var
 ```
-
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vars /mnt/var
 ```
 
-vlog
+#### libs
+```
+mkfs.ext4 -b 4096 /dev/proc/libs
+```
+```
+mkdir /mnt/var/usr
+```
+```
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/libs /mnt/var/usr
+```
+
+#### game
+```
+mkfs.ext4 -b 4096 /dev/proc/game
+```
+```
+mkdir /mnt/var/games
+```
+```
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/game /mnt/var/games
+```
+
+#### vlog
+```
+mkfs.ext4 -b 4096 /dev/proc/vlog
+```
 ```
 mkdir /mnt/var/log
 ```
-
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vlog /mnt/var/log
 ```
 
-vaud
+#### vaud
+```
+mkfs.ext4 -b 4096 /dev/proc/vaud
+```
 ```
 mkdir /mnt/var/log/audit
 ```
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vaud /mnt/var/log/audit
 ```
-
-vtmp
+#### vtmp
+```
+mkfs.ext4 -b 4096 /dev/proc/vtmp
+```
 ```
 mkdir /mnt/var/tmp
 ```
-
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vtmp /mnt/var/tmp
 ```
-
-vpac
+#### vpac
+```
+mkfs.ext4 -b 4096 /dev/proc/vpac
+```
 ```
 mkdir /mnt/var/cache
 ```
-
 ```
 mkdir /mnt/var/cache/pacman
 ```
-
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vpac /mnt/var/cache/pacman
 ```
-
-home
+#### ring
+```
+cryptsetup luksFormat --sector-size=4096 /dev/proc/ring
+```
+#### home
+```
+mkfs.ext4 -b 4096 /dev/proc/home
+```
 ```
 mkdir /mnt/home
 ```
-
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/home /mnt/home
 ```
