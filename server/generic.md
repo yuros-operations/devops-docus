@@ -24,7 +24,7 @@
 | 2         | 8    | proc   | vtmp | 512M | /mnt/var/tmp/         | ext4   |
 | 2         | 9    | proc   | vpac | 2G   | /mnt/var/cache/pacman | ext4   |
 | 2         | 10   | proc   | ring | 512M |                       | luks   |
-| 2         | 11   | proc   | home | 3G   | /mnt/home             | ext4   |
+| 2         | 11   | proc   | home | 100% | /mnt/home             | ext4   |
 
 
 ## procedure
