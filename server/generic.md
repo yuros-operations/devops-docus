@@ -281,6 +281,9 @@ FallbackNTP=time.cloudflare.com time.google.com time.aws.com
 timedatectl set-ntp true
 ```
 ```
+timedatectl set-timezone Asia/Jakarta
+```
+```
 timedatectl status
 ```
 ```
