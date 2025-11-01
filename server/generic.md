@@ -57,54 +57,10 @@ pvcreate /dev/mapper/proc
 ```
 vgcreate proc /dev/mapper/proc
 ```
-
+### root
 ```
 lvcreate -L 5G proc -n root
 ```
-
-```
-lvcreate -L 2G proc -n libs
-```
-
-```
-lvcreate -L 1G proc -n game
-```
-
-```
-lvcreate -L 2G proc -n temp
-```
-
-```
-lvcreate -L 3G proc -n vars
-```
-
-```
-lvcreate -L 2G proc -n vlog
-```
-
-```
-lvcreate -L 1G proc -n vaud
-```
-
-```
-lvcreate -L 512M proc -n vtmp
-```
-
-```
-lvcreate -L 2G proc -n vpac
-```
-
-```
-lvcreate -L 512M proc -n ring
-```
-
-```
-lvcreate -l100%FREE proc -n home
-```
-## preparation
-
-### root
-
 ```
 mkfs.ext4 -b 4096 /dev/proc/root
 ```
@@ -125,6 +81,9 @@ mount -o uid=0,gid=0,fmask=0077,dmask=0077 /dev/nvme0n1p1 /mnt/boot
 
 ### temp
 ```
+lvcreate -L 2G proc -n temp
+```
+```
 mkfs.ext4 -b 4096 /dev/proc/temp
 ```
 ```
@@ -135,6 +94,9 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/temp /mnt/tmp
 ```
 
 ### vars
+```
+lvcreate -L 3G proc -n vars
+```
 ```
 mkfs.ext4 -b 4096 /dev/proc/vars
 ```
@@ -147,6 +109,9 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vars /mnt/var
 
 ### libs
 ```
+lvcreate -L 2G proc -n libs
+```
+```
 mkfs.ext4 -b 4096 /dev/proc/libs
 ```
 ```
@@ -157,6 +122,9 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/libs /mnt/var/usr
 ```
 
 ### game
+```
+lvcreate -L 1G proc -n game
+```
 ```
 mkfs.ext4 -b 4096 /dev/proc/game
 ```
@@ -169,6 +137,9 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/game /mnt/var/games
 
 ### vlog
 ```
+lvcreate -L 2G proc -n vlog
+```
+```
 mkfs.ext4 -b 4096 /dev/proc/vlog
 ```
 ```
@@ -180,6 +151,9 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vlog /mnt/var/log
 
 ### vaud
 ```
+lvcreate -L 1G proc -n vaud
+```
+```
 mkfs.ext4 -b 4096 /dev/proc/vaud
 ```
 ```
@@ -190,6 +164,9 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vaud /mnt/var/log/audit
 ```
 ### vtmp
 ```
+lvcreate -L 512M proc -n vtmp
+```
+```
 mkfs.ext4 -b 4096 /dev/proc/vtmp
 ```
 ```
@@ -199,6 +176,9 @@ mkdir /mnt/var/tmp
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vtmp /mnt/var/tmp
 ```
 ### vpac
+```
+lvcreate -L 2G proc -n vpac
+```
 ```
 mkfs.ext4 -b 4096 /dev/proc/vpac
 ```
@@ -213,9 +193,21 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vpac /mnt/var/cache/pacman
 ```
 ### ring
 ```
+lvcreate -L 512M proc -n ring
+```
+```
 cryptsetup luksFormat --sector-size=4096 /dev/proc/ring
 ```
+```
+cryptsetup luksOpen /dev/proc/ring proc_keys
+```
+```
+mkfs.ext4 -b 4096 /dev/proc/ring/proc_keys
+```
 ### home
+```
+lvcreate -l100%FREE proc -n home
+```
 ```
 mkfs.ext4 -b 4096 /dev/proc/home
 ```
