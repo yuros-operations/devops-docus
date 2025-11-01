@@ -156,6 +156,7 @@ kernel.core_pattern=|/bin/false
 
 #### wake on lan
 
+systemd
 ```
 sudo nvim /etc/systemd/network/50-ethernet.link
 ```
@@ -168,6 +169,7 @@ NamePolicy=kernel database onboard slot path
 MACAddressPolicy=persistent
 WakeOnLan=magic
 ```
+udev
 ```
 sudo nvim /etc/udev/rules.d/81-wol.rules
 ```
