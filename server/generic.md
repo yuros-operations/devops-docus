@@ -632,7 +632,7 @@ kernel.core_pattern=|/bin/false
 
 ## module hardening
 
-### network module
+### network
 ```
 nvim /etc/modprobe.d/disable-network-protocols.conf
 ```
@@ -656,7 +656,7 @@ install p8023 /bin/true
 install p8022 /bin/true
 ```
 
-### network module
+### filesystem
 ```
 nvim /etc/modprobe.d/disable-filesystem-protocols.conf
 ```
