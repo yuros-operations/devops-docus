@@ -937,9 +937,6 @@ cat /boot/loader/entries/recovery.conf
 ### instrusion detection
 
 ```
-su loki
-```
-```
 cd /tmp
 ```
 ```
