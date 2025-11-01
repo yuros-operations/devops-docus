@@ -225,11 +225,11 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/home /mnt/home
 
 ## intel server
 ```
-pacstrap /mnt linux-hardened linux-firmware mkinitcpio intel-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync --noconfirm
+pacstrap /mnt linux-hardened linux-firmware mkinitcpio intel-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync sudo --noconfirm
 ```
 ## amd server
 ```
-pacstrap /mnt linux-hardened linux-firmware mkinitcpio amd-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync --noconfirm
+pacstrap /mnt linux-hardened linux-firmware mkinitcpio amd-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync sudo  --noconfirm
 ```
 
 ## network configuration
@@ -314,34 +314,54 @@ cat /etc/locale.conf
 ```
 
 ### user
-
 ```
-echo 'loki ALL=(ALL:ALL) ALL' > /etc/sudoers.d/00_loki
+rm /etc/skel/.bash_profile
 ```
-
 ```
-useradd -m loki
+rm /etc/skel/.bashrc
 ```
-
 ```
-usermod -aG wheel loki
+rm /etc/skel/.bash_logout
 ```
-
 ```
-echo "1511" | passwd loki --stdin
+echo 'loki ALL=(ALL:ALL) ALL' >> /etc/sudoers
 ```
-
+```
+cat /etc/sudoers
+```
+```
+useradd -d /var/usr loki
+```
+```
+chown -R loki:loki /var/usr
+```
+```
+passwd loki
+```
+```
+su loki
+```
+```
+sudo su
+```
+```
+exit
+```
+```
+exit
+```
 ```
 passwd -l root
 ```
-### prepare boot directory
+### boot directory
 
+#### intel server
 ```
 rm /boot/initramfs-linux-hardened*
 ```
 
 ```
-mkdir /boot/efi /boot/efi/linux /boot/efi/systemd /boot/efi/rescue /boot/efi/boot
+mkdir -p /boot/efi /boot/efi/linux /boot/efi/systemd /boot/efi/rescue /boot/efi/boot
 ```
 
 ```
@@ -352,27 +372,31 @@ mkdir /boot/kernel
 mv /boot/intel-ucode.img /boot/vmlinuz-linux-hardened /boot/kernel
 ```
 
-
-**[-] install boot path**
-
+#### amd server
 ```
-bootctl --path=/boot install
+rm /boot/initramfs-linux-hardened*
 ```
 
+```
+mkdir -p /boot/efi /boot/efi/linux /boot/efi/systemd /boot/efi/rescue /boot/efi/boot
+```
 
+```
+mkdir /boot/kernel
+```
 
-###  prepare initram directory
+```
+mv /boot/amd-ucode.img /boot/vmlinuz-linux-hardened /boot/kernel
+```
+
+### initram directory
 
 ```
 rm -fr /etc/mkinitcpio.conf.d
 ```
 
 ```
-mv /etc/mkinitcpio.conf /etc/mkinitcpio.d/default
-```
-
-```
-mv /etc/mkinitcpio.d/linux-hardened.preset /etc/mkinitcpio.d/default-hardened-preset
+mv /etc/mkinitcpio.conf /etc/mkinitcpio.d/default.conf
 ```
 
 
@@ -383,7 +407,7 @@ mkdir /etc/cmdline.d
 ```
 
 ```
-touch /etc/cmdline.d/{01-boot.conf,02-mods.conf,03-secs.conf,04-perf.conf,05-misc.conf,06-nets.conf}
+touch /etc/cmdline.d/{01-boot.conf,02-mods.conf,03-secs.conf,04-perf.conf,05-nets.conf,06-misc.conf}
 ```
 
 ```
@@ -397,38 +421,28 @@ echo "data UUID=$(blkid -s UUID -o value /dev/nvme0n1p4) none" >> /etc/crypttab
 echo "ipv6.disable=1" > /etc/cmdline.d/04-perf.conf
 ```
 
-```
-echo "intel_iommu=on i915.fastboot=1" > /etc/cmdline.d/02-mods.conf
-```
-
-
 ###  configure initramfs
 
 ```
-echo "#blackrog initrams" > /etc/mkinitcpio.d/blackrog.conf
+nvim /etc/mkinitcpio.d/blackrog.conf
 ```
-
+cari lalu commenting
 ```
-export CPIOHOOK="base udev autodetect microcode modconf kms keyboard net clevis encrypt lvm2 block filesystems fsck"
+HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck)
 ```
-
+tambahkan
 ```
-export CPIOMODS="vfio_pci vfio vfio_iommu_type1"
+HOOKS="base udev autodetect microcode modconf kms keyboard keymap consolefont net clevis encrypt lvm2 block filesystems fsck"
 ```
-
+tambahkan pada bagian binaries
 ```
-export CPIOBINS="/usr/bin/curl"
+/usr/bin/curl
 ```
-
-```
-printf "MODULES=($CPIOMODS)\nBINARIES=($CPIOBINS)\nFILES=()\nHOOKS=($CPIOHOOK)" >> /etc/mkinitcpio.d/blackrog.conf 
-```
-
 
 ### configure linux preset
 
 ```
-echo "#blackrog linux preset" > /etc/mkinitcpio.d/linux-hardened.preset
+nvim /etc/mkinitcpio.d/linux-hardened.preset
 ```
 
 ```
