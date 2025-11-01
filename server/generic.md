@@ -381,9 +381,7 @@ exit
 ```
 exit
 ```
-```
-passwd -l root
-```
+
 ### hook clevis
 ```
 su loki
@@ -953,6 +951,9 @@ nvim /etc/udev/rules.d/81-wol.rules
 ```
 ACTION=="add", SUBSYSTEM=="net", NAME=="en*", RUN+="/usr/bin/ethtool -s $name wol g"
 ```
+```
+ethtool interface | grep Wake-on
+```
 
 ### instrusion detection
 
@@ -1281,4 +1282,8 @@ umount -R /mnt
 ```
 ```
 reboot
+```
+# 3. post instalation
+```
+passwd -l root
 ```
