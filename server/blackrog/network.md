@@ -176,8 +176,9 @@ sudo nvim /etc/udev/rules.d/81-wol.rules
 ```
 ACTION=="add", SUBSYSTEM=="net", NAME=="en*", RUN+="/usr/bin/ethtool -s $name wol g"
 ```
-note: mac address: F8:0D:AC:13:B3:F0
-      interface: ether2
+note: 
+- mac address: F8:0D:AC:13:B3:F0
+- interface: ether2
 #### sleep
 ```
 sudo mkdir -p /etc/systemd/sleep.conf.d/
