@@ -219,7 +219,9 @@ mkdir /mnt/home
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/home /mnt/home
 ```
-# 2.packages
+
+# 2.installation
+
 
 ## intel server
 ```
@@ -229,14 +231,20 @@ pacstrap /mnt linux-hardened linux-firmware mkinitcpio intel-ucode tang clevis m
 ```
 pacstrap /mnt linux-hardened linux-firmware mkinitcpio amd-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync --noconfirm
 ```
-# 3. config
+
+## network configuration
 ```
 cp /etc/systemd/network/* /mnt/etc/systemd/network/
 ```
 
+## generate partition layout
 ```
 genfstab -U /mnt > /mnt/etc/fstab
 ```
+
+
+# 3. chrooting
+
 
 ```
 arch-chroot /mnt
