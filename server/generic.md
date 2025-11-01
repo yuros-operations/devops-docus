@@ -53,9 +53,14 @@ cryptsetup luksOpen /dev/nvme0n1p4 data
 ```
 pvcreate /dev/mapper/proc
 ```
-
 ```
 vgcreate proc /dev/mapper/proc
+```
+```
+pvcreate /dev/mapper/data
+```
+```
+vgcreate proc /dev/mapper/data
 ```
 ### root
 ```
