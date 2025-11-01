@@ -376,6 +376,24 @@ cd mkinitcpio-clevis-hook
 ```
 makepkg -si
 ```
+```
+clevis luks bind -d /dev/nvme0n1p3 tang '{"url":"http://10.10.1.2:51379"}'
+```
+```
+clevis luks bind -d /dev/nvme0n1p3 tang '{"url":"http://10.10.1.10:51379"}'
+```
+```
+clevis luks bind -d /dev/nvme0n1p3 tang '{"url":"http://10.10.1.11:51379"}'
+```
+```
+clevis luks bind -d /dev/nvme0n1p4 tang '{"url":"http://10.10.1.2:51379"}'
+```
+```
+clevis luks bind -d /dev/nvme0n1p4 tang '{"url":"http://10.10.1.10:51379"}'
+```
+```
+clevis luks bind -d /dev/nvme0n1p4 tang '{"url":"http://10.10.1.11:51379"}'
+```
 
 ### boot directory
 #### intel server
@@ -427,6 +445,9 @@ echo "data UUID=$(blkid -s UUID -o value /dev/nvme0n1p4) none" >> /etc/crypttab
 ```
 ```
 echo "ipv6.disable=1" > /etc/cmdline.d/04-perf.conf
+```
+```
+echo "ip=(ip address)::10.10.1.1:255.255.255.0::eth0:none nameserver=10.10.1.1 " /etc/cmdline.d/05-nets.conf
 ```
 ```
 echo "rw quiet" > /etc/cmdline.d/06-misc.conf
@@ -513,7 +534,7 @@ rm /etc/systemd/network/20-wlan.network /etc/systemd/network/20-wwan.network
 ```
 nvim /etc/systemd/network/20-ethernet.network
 ```
-commenting
+commenting di bawah [Network]
 ```
 DHCP=yes
 ```
@@ -522,4 +543,8 @@ MulticastDNS=yes
 ```
 tambahkan
 ```
+Bridge=bridge
+```
+```
+nvim 
 ```
