@@ -394,37 +394,11 @@ mv /boot/amd-ucode.img /boot/vmlinuz-linux-hardened /boot/kernel
 ```
 rm -fr /etc/mkinitcpio.conf.d
 ```
-
 ```
 mv /etc/mkinitcpio.conf /etc/mkinitcpio.d/default.conf
 ```
-
-
-### configure kernel parameter
-
 ```
-mkdir /etc/cmdline.d
-```
-
-```
-touch /etc/cmdline.d/{01-boot.conf,02-mods.conf,03-secs.conf,04-perf.conf,05-nets.conf,06-misc.conf}
-```
-
-```
-echo "cryptdevice=UUID=$(blkid -s UUID -o value /dev/nvme0n1p3):proc root=/dev/proc/root" > /etc/cmdline.d/01-boot.conf
-```
-
-```
-echo "data UUID=$(blkid -s UUID -o value /dev/nvme0n1p4) none" >> /etc/crypttab
-```
-```
-echo "ipv6.disable=1" > /etc/cmdline.d/04-perf.conf
-```
-
-###  configure initramfs
-
-```
-nvim /etc/mkinitcpio.d/blackrog.conf
+nvim /etc/mkinitcpio.d/default.conf
 ```
 cari lalu commenting
 ```
@@ -439,28 +413,45 @@ tambahkan pada bagian binaries
 /usr/bin/curl
 ```
 
+### configure kernel parameter
+
+```
+mkdir /etc/cmdline.d
+```
+```
+touch /etc/cmdline.d/{01-boot.conf,02-mods.conf,03-secs.conf,04-perf.conf,05-nets.conf,06-misc.conf}
+```
+```
+echo "cryptdevice=UUID=$(blkid -s UUID -o value /dev/nvme0n1p3):proc root=/dev/proc/root" > /etc/cmdline.d/01-boot.conf
+```
+```
+echo "data UUID=$(blkid -s UUID -o value /dev/nvme0n1p4) none" >> /etc/crypttab
+```
+```
+echo "ipv6.disable=1" > /etc/cmdline.d/04-perf.conf
+```
+```
+echo "rw quiet" > /etc/cmdline.d/06-misc.conf
+```
+
 ### configure linux preset
 
 ```
 nvim /etc/mkinitcpio.d/linux-hardened.preset
 ```
-
+uncommenting dan ubah menjadi
 ```
-echo 'ALL_config="/etc/mkinitcpio.d/blackrog.conf"' >> /etc/mkinitcpio.d/linux-hardened.preset
+ALL_config="/etc/mkinitcpio.d/default.conf"
 ```
-
 ```
-echo 'ALL_kver="/boot/kernel/vmlinuz-linux-hardened"' >> /etc/mkinitcpio.d/linux-hardened.preset
+ALL_kver="/boot/kernel/vmlinuz-linux-hardened" 
 ```
-
 ```
-echo "PRESETS=('default')" >> /etc/mkinitcpio.d/linux-hardened.preset
+PRESETS=('default')
 ```
-
 ```
-echo 'default_uki="/boot/efi/linux/blackrog.efi"' >> /etc/mkinitcpio.d/linux-hardened.preset
+default_uki="/boot/efi/linux/blackbird-hardened.efi"
 ```
-
 
 ### generate efi files
 
