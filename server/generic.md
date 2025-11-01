@@ -249,7 +249,15 @@ genfstab -U /mnt > /mnt/etc/fstab
 ```
 arch-chroot /mnt
 ```
-### local time
+
+## hostname
+
+```
+echo 'nama_hostname' > /etc/hostname
+```
+
+
+## local time
 
 ```
 ln -sf /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
@@ -258,37 +266,6 @@ ln -sf /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 ```
 hwclock --systohc
 ```
-
-### hosts
-
-```
-echo 'nama_hostname' > /etc/hostname
-```
-
-```
-echo "127.0.0.1        localhost" > /etc/hosts
-```
-
-```
-echo "127.0.0.1        hostname" >> /etc/hosts
-```
-
-```
-printf "\n\n" >> /etc/hosts
-```
-
-```
-echo "::1              localhost ip6-localhost ip6-loopback" >> /etc/hosts
-```
-
-```
-echo "ff02::1          ip6-allnodes" >> /etc/hosts
-```
-
-```
-echo "ff02::2          ip6-allroutes" >> /etc/hosts
-```
-
 
 ### locale
 
