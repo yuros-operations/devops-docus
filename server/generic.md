@@ -108,14 +108,32 @@ lvcreate -L 512M proc -n ring
 lvcreate -L 5G proc -n home
 ```
 
-### format partition
-```
-mkfs.vfat -F32 -S 4096 -n BOOT /dev/nvme0n1p1
-```
+### preparation
+
+#### root
 
 ```
 mkfs.ext4 -b 4096 /dev/proc/root
 ```
+
+#### boot
+```
+mkfs.vfat -F32 -S 4096 -n BOOT /dev/nvme0n1p1
+```
+
+#### temp
+```
+mkfs.ext4 -b 4096 /dev/proc/temp
+```
+
+#### vars
+```
+mkfs.ext4 -b 4096 /dev/proc/vars
+```
+
+#### libs
+
+
 
 ```
 mkfs.ext4 -b 4096 /dev/proc/ubin
@@ -134,9 +152,7 @@ mkfs.ext4 -b 4096 /dev/proc/ipcv
 mkfs.ext4 -b 4096 /dev/proc/vda0
 ```
 
-```
-mkfs.ext4 -b 4096 /dev/proc/vars
-```
+
 
 ```
 mkfs.ext4 -b 4096 /dev/proc/vlog
