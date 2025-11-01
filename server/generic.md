@@ -266,26 +266,54 @@ ln -sf /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 ```
 hwclock --systohc
 ```
+```
+mkdir /etc/systemd/timesyncd.conf.d
+```
+```
+nvim /etc/systemd/timesyncd.conf.d/local.conf
+```
+```
+[Time]
+NTP=0.id.pool.ntp.org 1.id.pool.ntp.org 2.id.pool.ntp.org 3.id.pool.ntp.org
+FallbackNTP=time.cloudflare.com time.google.com time.aws.com
+```
+```
+timedatectl set-ntp true
+```
+```
+timedatectl status
+```
+```
+timedatectl show-timesync --all
+```
+```
+systemctl enable systemd-timesyncd.service
+```
 
 ### locale
 
 ```
-printf "en_US.UTF-8 UTF-8\n en_US ISO-8859-1" >> /etc/locale.gen
+nvim /etc/locale.gen
 ```
-
+uncommenting
+```
+en_US.UTF-8 UTF-8
+en_US ISO-8859-1
+```
 ```
 locale-gen && locale > /etc/locale.conf
 ```
-
 ```
 sed -i '1s/.*/LANG=en_US.UTF-8/' /etc/locale.conf
 ```
-
+```
+cat /etc/locale.conf
+```
 
 ### user
 
 ```
-echo 'lektor ALL=(ALL:ALL) ALL' > /etc/sudoers.d/00_lektor
+echo 'loki ALL=(ALL:ALL) ALL' > /etc/sudoers.d/00_lektor
 ```
 
 ```
