@@ -168,6 +168,12 @@ NamePolicy=kernel database onboard slot path
 MACAddressPolicy=persistent
 WakeOnLan=magic
 ```
+```
+sudo nvim /etc/udev/rules.d/81-wol.rules
+```
+```
+ACTION=="add", SUBSYSTEM=="net", NAME=="en*", RUN+="/usr/bin/ethtool -s $name wol g"
+```
 #### sleep
 ```
 sudo mkdir -p /etc/systemd/sleep.conf.d/
