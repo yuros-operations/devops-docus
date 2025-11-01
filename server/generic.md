@@ -15,8 +15,8 @@
 | partition | list | group  | name | size | mount                 | format |
 | --------- | ---- | ------ | ---- | ---- | --------------------- | ------ |
 | 2         | 1    | proc   | root | 5G   | /mnt                  | ext4   |
-| 2         | 2    | proc   | libs | 2G   | /var/usr/             | ext4   |
-| 2         | 2    | proc   | game | 1G   | /var/games/           | ext4   |
+| 2         | 2    | proc   | libs | 2G   | /mnt/var/usr/         | ext4   |
+| 2         | 2    | proc   | game | 1G   | /mnt/var/games/       | ext4   |
 | 2         | 3    | proc   | temp | 2G   | /mnt/tmp              | ext4   |
 | 2         | 5    | proc   | vars | 3G   | /mnt/var              | ext4   |
 | 2         | 6    | proc   | vlog | 2G   | /mnt/var/log/         | ext4   |
