@@ -6,9 +6,9 @@
 | disk | partition | type              | luks  | lvm   | label    | size      | format | mount                      |
 | ---- | --------- | ----------------- | ----- | ----- | -------- | --------- | ------ | -------------------------- |
 | 0    | 1         | efi               | false | false | boot     | 320M      | fat 32 | /boot                      |
-| 0    | 2         | linux file system | true  | false | keys     | 256M      | luks   | none                       |
+| 0    | 2         | linux server data | true  | false | keys     | 256M      | luks   | none                       |
 | 0    | 3         | linux file system | true  | true  | proc     | 22G       | luks   | see logical layout point 1 |
-| 0    | 4         | linux file system | true  | true  | data     | 100% Free | luks   | see logical layout point 1 |
+| 0    | 4         | linux server data | true  | true  | data     | 100% Free | luks   | see logical layout point 1 |
 
 
 #### disk group
