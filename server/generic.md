@@ -388,6 +388,30 @@ clevis luks bind -d /dev/nvme0n1p4 tang '{"url":"http://10.10.1.10:51379"}'
 ```
 clevis luks bind -d /dev/nvme0n1p4 tang '{"url":"http://10.10.1.11:51379"}'
 ```
+### tang server
+```
+systemctl enable --now tangd.socket
+```
+```
+mkdir /etc/systemd/system/tangd.socket.d
+```
+```
+nvim /etc/systemd/system/tangd.socket.d/override.conf
+```
+```
+[Socket]
+ListenStream=
+ListenStream=51379 
+```
+```
+systemctl daemon-reload
+```
+```
+systemctl show tangd.socket -p Listen
+```
+```
+systemctl restart tangd.socket
+```
 
 ### boot directory
 #### intel server
