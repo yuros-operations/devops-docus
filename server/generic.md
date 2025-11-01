@@ -2,25 +2,25 @@
 | disk | partition | type              | luks  | lvm   | label    | size      | format | mount                      |
 | ---- | --------- | ----------------- | ----- | ----- | -------- | --------- | ------ | -------------------------- |
 | 0    | 1         | efi               | false | false | boot     | 320M      | fat 32 | /boot                      |
-| 0    | 2         | linux file system | true  | false | keys     | 512M      | luks   | none                       |
-| 0    | 3         | linux file system | true  | true  | proc | 53G       | luks   | see logical layout point 1 |
-| 0    | 4         | linux file system | true  | true  | data | 100% Free | luks   | see logical layout point 1 |
-#### disk group
+| 0    | 2         | linux file system | true  | false | keys     | 256M      | luks   | none                       |
+| 0    | 3         | linux file system | true  | true  | proc     | 22G       | luks   | see logical layout point 1 |
+| 0    | 4         | linux file system | true  | true  | data     | 100% Free | luks   | see logical layout point 1 |
 
-| partition | list | group | name | size | mount              | format |
-| --------- | ---- | ----- | ---- | ---- | ------------------ | ------ |
-| 2         | 1    | proc   | root | 10G  | /mnt               | ext4   |
-| 2         | 2    | proc   | ubin | 3.5G  | /mnt/dev/swap           | ext4   |
-| 2         | 3    | proc   | temp | 2G   | /mnt/tmp               | ext4   |
-| 2         | 4   | proc   | ipcv | 2G   | /mnt/dev/shm               | ext4   |
-| 2         | 4   | proc   | vda0 | 10G   | /mnt/dev/vda0               | ext4   |
-| 2         | 5    | proc   | vars | 5G   | /mnt/var           | ext4   |
-| 2         | 6    | proc   | vlog | 2G   | /mnt/var/log/      | ext4   |
-| 2         | 7    | proc   | vaud | 512M   | /mnt/var/log/audit | ext4   |
-| 2         | 8    | proc   | vtmp | 2G | /mnt/var/tmp/      | ext4   |
-| 2         | 9    | proc   | vpac | 2G   | /mnt/var/cache/pacman | ext4|
-| 2         | 10    | proc   | ring | 512M |                     | luks   |
-| 2         | 11   | proc   | home | 5G   | /mnt/home               | ext4   |
+
+#### disk group
+| partition | list | group  | name | size | mount                 | format |
+| --------- | ---- | ------ | ---- | ---- | --------------------- | ------ |
+| 2         | 1    | proc   | root | 5G   | /mnt                  | ext4   |
+| 2         | 2    | proc   | libs | 2G   | /var/usr/             | ext4   |
+| 2         | 2    | proc   | game | 1G   | /var/games/           | ext4   |
+| 2         | 3    | proc   | temp | 2G   | /mnt/tmp              | ext4   |
+| 2         | 5    | proc   | vars | 3G   | /mnt/var              | ext4   |
+| 2         | 6    | proc   | vlog | 2G   | /mnt/var/log/         | ext4   |
+| 2         | 7    | proc   | vaud | 1G   | /mnt/var/log/audit    | ext4   |
+| 2         | 8    | proc   | vtmp | 512M | /mnt/var/tmp/         | ext4   |
+| 2         | 9    | proc   | vpac | 2G   | /mnt/var/cache/pacman | ext4   |
+| 2         | 10   | proc   | ring | 512M |                       | luks   |
+| 2         | 11   | proc   | home | 3G   | /mnt/home             | ext4   |
 
 
 ## guidline
