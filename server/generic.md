@@ -945,6 +945,14 @@ printf "title recovery\nefi /efi/rescue/recovery.efi" > /boot/loader/entries/rec
 ```
 cat /boot/loader/entries/recovery.conf
 ```
+### wake on lan
+
+```
+nvim /etc/udev/rules.d/81-wol.rules
+```
+```
+ACTION=="add", SUBSYSTEM=="net", NAME=="en*", RUN+="/usr/bin/ethtool -s $name wol g"
+```
 
 ### instrusion detection
 
