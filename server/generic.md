@@ -363,8 +363,6 @@ exit
 ```
 passwd -l root
 ```
-### boot directory
-
 ### hook clevis
 
 ```
@@ -379,7 +377,7 @@ cd mkinitcpio-clevis-hook
 makepkg -si
 ```
 
-
+### boot directory
 #### intel server
 ```
 rm /boot/initramfs-linux-hardened*
