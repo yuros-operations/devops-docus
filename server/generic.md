@@ -365,6 +365,21 @@ passwd -l root
 ```
 ### boot directory
 
+### hook clevis
+
+```
+git clone https://aur.archlinux.org/mkinitcpio-clevis-hook.git
+```
+
+```
+cd mkinitcpio-clevis-hook
+```
+
+```
+makepkg -si
+```
+
+
 #### intel server
 ```
 rm /boot/initramfs-linux-hardened*
@@ -436,30 +451,55 @@ HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont bl
 ```
 tambahkan
 ```
-HOOKS="base udev autodetect microcode modconf kms keyboard keymap consolefont net clevis encrypt lvm2 block filesystems fsck"
+HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont net clevis encrypt lvm2 block filesystems fsck)
 ```
 tambahkan pada bagian binaries
 ```
 /usr/bin/curl
 ```
-
 #### configure linux preset
 
 ```
 nvim /etc/mkinitcpio.d/linux-hardened.preset
 ```
-uncommenting dan ubah menjadi
+uncommenting 
+
+```
+#ALL_config="/etc/mkinitcpio.conf"
+```
+lalu ubah
 ```
 ALL_config="/etc/mkinitcpio.d/default.conf"
 ```
+edit
+```
+ALL_kver="/boot/vmlinuz-linux-hardened"
+```
+menjadi
 ```
 ALL_kver="/boot/kernel/vmlinuz-linux-hardened" 
+```
+edit
+```
+PRESETS=('default' 'fallback')
 ```
 ```
 PRESETS=('default')
 ```
+uncommenting
+```
+#default_uki="/efi/EFI/Linux/arch-linux-hardened.efi"
+```
+lalu ubah
 ```
 default_uki="/boot/efi/linux/blackbird-hardened.efi"
+```
+commenting
+```
+fallback_image="/boot/initramfs-linux-hardened-fallback.img"
+```
+```
+fallback_options="-S autodetect"
 ```
 
 ### generate efi files
