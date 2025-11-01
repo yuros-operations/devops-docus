@@ -557,6 +557,9 @@ X11Forwarding no
 # override default of no subsystems
 #Subsystem	sftp	/usr/lib/ssh/sftp-server
 ```
+```
+systemctl enable ssh
+```
 
 
 ## kernels harden
@@ -767,6 +770,12 @@ Address=[IP]/24
 Gateway=10.10.1.1
 DNS=1.1.1.1 8.8.8.8
 MulticastDNS=yes
+```
+```
+systemctl enable systemd-networkd
+```
+```
+systemctl enable systemd-resolved
 ```
 
 
