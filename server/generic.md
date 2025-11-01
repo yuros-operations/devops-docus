@@ -983,7 +983,7 @@ nvim /etc/systemd/system/aide.timer
 Description=Aide check every day at 5AM
 
 [Timer]
-OnCalendar=*-*-* 05:00:00
+OnCalendar=*:0/8:00
 Unit=aidecheck.service
 
 [Install]
