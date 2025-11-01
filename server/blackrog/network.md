@@ -153,6 +153,21 @@ kernel.deny_new_usb=1
 #disable coredum
 kernel.core_pattern=|/bin/false
 ```
+
+#### wake on lan
+
+```
+sudo nvim /etc/systemd/network/50-ethernet.link
+```
+```
+[Match]
+MACAddress=aa:bb:cc:dd:ee:ff
+
+[Link]
+NamePolicy=kernel database onboard slot path
+MACAddressPolicy=persistent
+WakeOnLan=magic
+```
 #### sleep
 ```
 sudo mkdir -p /etc/systemd/sleep.conf.d/
