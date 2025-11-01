@@ -377,16 +377,10 @@ cd mkinitcpio-clevis-hook
 makepkg -si
 ```
 ```
-clevis luks bind -d /dev/nvme0n1p3 tang '{"url":"http://10.10.1.2:51379"}'
-```
-```
 clevis luks bind -d /dev/nvme0n1p3 tang '{"url":"http://10.10.1.10:51379"}'
 ```
 ```
 clevis luks bind -d /dev/nvme0n1p3 tang '{"url":"http://10.10.1.11:51379"}'
-```
-```
-clevis luks bind -d /dev/nvme0n1p4 tang '{"url":"http://10.10.1.2:51379"}'
 ```
 ```
 clevis luks bind -d /dev/nvme0n1p4 tang '{"url":"http://10.10.1.10:51379"}'
