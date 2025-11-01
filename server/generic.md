@@ -407,6 +407,39 @@ ListenStream=51379
 systemctl show tangd.socket -p Listen
 ```
 
+### firewelld
+
+
+
+```
+nvim /usr/lib/firewalld/zones/block.xml
+```
+```
+nvim /usr/lib/firewalld/zones/external.xml
+```
+```
+nvim /usr/lib/firewalld/zones/home.xml
+```
+```
+nvim /usr/lib/firewalld/zones/internal.xml 
+```
+ 
+delete semua service 
+
+```
+nvim /usr/lib/firewalld/zones/public.xml 
+```
+
+delete semua service selain ssh,dan tamahkan
+```
+  <port protocol="tcp" port="8080-8085"/>
+```
+dibawah
+```
+<service name="ssh"/>
+```
+
+
 ### boot directory
 #### intel server
 ```
