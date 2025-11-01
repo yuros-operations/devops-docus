@@ -221,5 +221,5 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/home /mnt/home
 ```
 # 2.packages
 ```
-pacstrap /mnt linux-hardened linux-firmware mkinitcpio intel-ucode tang clevis mkinitcpio-nfs-utils libpwquality luksmeta git --noconfirm
+pacstrap /mnt linux-hardened linux-firmware mkinitcpio intel-ucode tang clevis mkinitcpio-nfs-utils libpwquality luksmeta git base neovim lvm2 openssh polkit ethtool iptables-nft firewalld apparmor rsync grsync --noconfirm
 ```
