@@ -1067,7 +1067,7 @@ ConditionACPower=true
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/aide --check
+ExecStart=/usr/local/bin/aide --check
 
 [Install]
 WantedBy=multi-user.target
@@ -1085,6 +1085,9 @@ Unit=aidecheck.service
 
 [Install]
 WantedBy=multi-user.target
+```
+```
+systemctl enable aide.timer
 ```
 ```
 mkdir -p /var/log/aide
