@@ -380,8 +380,22 @@ exit
 exit
 ```
 ```
-useradd -d /var/games -g games games
+useradd -d /var/games -u 50 -g games games
 ```
+```
+cat /etc/passwd | grep games
+```
+output
+```
+games:x:50:50::/var/games:/usr/bin/nologin
+```
+```
+passwd -l games
+```
+```
+nvim /etc/passwd
+```
+pastikan line `games` dibawah `nobody`
 
 ### hook clevis
 ```
