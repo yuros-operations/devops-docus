@@ -781,10 +781,10 @@ systemctl enable update.timer
 ```
 ## prometheus 
 ```
-sudo systemctl enable prometheus.service
+systemctl enable prometheus.service
 ```
 ```
-sudo systemctl enable prometheus-node-exporter.service
+systemctl enable prometheus-node-exporter.service
 ```
 
 ### configuration
