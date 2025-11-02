@@ -208,11 +208,11 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/data/home /mnt/home
 # 2. instalation package
 for intel
 ```
-pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd ethtool linux-hardened linux-firmware mkinitcpio intel-ucode libpwquality cracklib less bubblewrap-suid irqbalance reflector tuned
+pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd ethtool linux-hardened linux-firmware mkinitcpio intel-ucode libpwquality cracklib less bubblewrap-suid irqbalance reflector tuned tuned-ppd
 ```
 for amd
 ```
-pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd ethtool linux-hardened linux-firmware mkinitcpio amd-ucode libpwquality cracklib less bubblewrap-suid irqbalance reflector tuned
+pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd ethtool linux-hardened linux-firmware mkinitcpio amd-ucode libpwquality cracklib less bubblewrap-suid irqbalance reflector tuned tuned-ppd
 ```
 ### network configuration
 ```
@@ -805,12 +805,7 @@ systemctl enable irqbalance
 ```
 systemctl enable tuned
 ```
-```
-tuned-adm profile througput-performance
-```
-```
-tuned-adm activer
-```
+
 output: througput-performance
 
 ### network
