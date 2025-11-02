@@ -45,7 +45,7 @@ cryptsetup luksOpen /dev/nvme0n1p4 data
 | 2         | 2    | proc   | game | 1G   | /mnt/var/games/       | ext4   |
 | 2         | 6    | proc   | vlog | 2G   | /mnt/var/log/         | ext4   |
 | 2         | 7    | proc   | vaud | 1G   | /mnt/var/log/audit    | ext4   |
-| 2         | 8    | proc   | vtmp | 512M | /mnt/var/tmp/         | ext4   |
+| 2         | 8    | proc   | tmpfs| 256M | /mnt/tmp/             | ext4   |
 | 2         | 9    | proc   | vpac | 2G   | /mnt/var/cache/pacman | ext4   |
 | 2         | 10   | proc   | ring | 512M |                       | luks   |
 | 2         | 11   | proc   | home | 100% | /mnt/home             | ext4   |
@@ -84,18 +84,18 @@ mkdir /mnt/boot
 mount -o uid=0,gid=0,fmask=0077,dmask=0077 /dev/nvme0n1p1 /mnt/boot
 ```
 
-### temp
+### tmpfs
 ```
-lvcreate -L 2G proc -n temp
+lvcreate -L 100M proc -n tmpfs
 ```
 ```
-mkfs.ext4 -b 4096 /dev/proc/temp
+mkfs.ext4 -b 4096 /dev/proc/tmpfs
 ```
 ```
 mkdir /mnt/tmp
 ```
 ```
-mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/temp /mnt/tmp
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/tmpfs /mnt/tmp
 ```
 
 ### vars
