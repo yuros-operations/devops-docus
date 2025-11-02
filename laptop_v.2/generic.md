@@ -49,7 +49,7 @@ cryptsetup luksOpen /dev/partisi_data data
 | 2         | 8    | proc  | tmpfs|  /mnt/tmp                 | ext4   |
 | 2         | 9    | proc  | vtmp |  /mnt/var/tmp             | ext4   |
 
-#### minimum disk layout root dengan minimum ram 4GB
+#### minimum disk layout root ram 4GB
 | partition | list  | group | name | size | mount                    | format |
 | --------- | ----  | ----- | ---- |----  | -------------------------| ------ |
 | 2         | 1     |       | boot | 320M |/mnt/boot                 | vfat   |
@@ -63,7 +63,7 @@ cryptsetup luksOpen /dev/partisi_data data
 | 2         | 9     | proc  | ring | 512M |                          | ext4   |
 | 2         | 11    | proc  | vtmp | 2G   |/mnt/var/tmp              | ext4   |
 
-#### minimum disk layout root dengan minimum ram 2GB
+#### minimum disk layout root  ram 2GB
 | partition | list  | group | name | size | mount                    | format |
 | --------- | ----  | ----- | ---- |----  | -------------------------| ------ |
 | 2         | 1     |       | boot | 320M |/mnt/boot                 | vfat   |
