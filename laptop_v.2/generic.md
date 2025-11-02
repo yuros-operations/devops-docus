@@ -1310,10 +1310,11 @@ reboot
 ```
 passwd -l root
 ```
+### blackbird hyprland
 #### installation
 
 ```
-sudo pacman -S uwsm hyprland hyprpolkitagent hypridle hyprlock xdg-desktop-portal-hyprland pipewire pipewire-pulse pipewire-jack wireplumber pavucontrol kitty qt5-wayland qt6-wayland ttf-jetbrains-mono-nerd ttf-droid btop nautilus nautilus-image-converter sushi mako waybar wofi wl-clipboard cliphist mailcap hyprshot gnome-keyring libsecret brightnessctl hyprpicker  --noconfirm
+sudo pacman -S uwsm hyprland hyprpolkitagent hypridle hyprlock xdg-desktop-portal-hyprland pipewire pipewire-pulse pipewire-jack wireplumber pavucontrol kitty qt5-wayland qt6-wayland ttf-jetbrains-mono-nerd ttf-droid btop nautilus nautilus-image-converter sushi mako waybar wofi wl-clipboard cliphist mailcap hyprshot gnome-keyring libsecret brightnessctl hyprpicker flatpak gnome-software hugo go  --noconfirm
 ```
 #### service
 
@@ -1366,4 +1367,107 @@ Current=claw
 ```
 sudo systemctl enable sddm
 ```
+### apps
+#### configuration
 
+```
+sudo usermod -aG wheel nama_user
+```
+```
+sudo mkdir /opt/flat
+```
+
+```
+sudo ln -sf /opt/flat /var/lib/flatpak
+```
+
+```
+sudo flatpak override --filesystem=$HOME/.themes
+```
+
+```
+sudo flatpak override --filesystem=$HOME/.icons
+```
+```
+sudo flatpak override --env=GTK_THEME=flow
+```
+```
+sudo flatpak override --env=ICON_THEME=eggs
+```
+
+
+### browser
+
+#### instalation
+```
+sudo flatpak install --system  flathub org.mozilla.firefox
+```
+```
+sudo flatpak install --system flathub com.google.Chrome
+```
+### development
+#### instalation
+```
+sudo flatpak install --system flathub com.visualstudio.code
+```
+
+### media player
+
+#### installation
+
+```
+sudo pacman -S mpd mpc mpv yt-dlp --noconfirm
+```
+```
+sudo flatpak install --system flathub de.wagnermartin.Plattenalbum
+```
+#### configuration
+```
+nvim .config/hypr/hyprland.conf
+```
+uncommenting
+```
+exec-once = /usr/bin/mpd --no-daemon 
+```
+### office tools
+
+#### installation
+```
+sudo flatpak install --system flathub md.obsidian.Obsidian
+```
+
+```
+sudo flatpak install --system flathub org.gnome.Calendar
+```
+
+```
+sudo flatpak install --system flathub org.gnome.Evolution
+```
+
+```
+sudo flatpak install --system flathub org.gnome.Calculator
+```
+
+### acces management
+
+#### installation
+
+```
+sudo flatpak install --system flathub com.github.tchx84.Flatseal
+```
+
+### key tools
+
+#### installation
+
+```
+sudo flatpak install --system flathub org.keepassxc.KeePassXC
+```
+
+```
+cd .local/share/applications
+```
+
+```
+rm -fr org.keepassxc.KeePassXC
+```
