@@ -1011,10 +1011,7 @@ mkinitcpio -P
 
 ### recovery
 ```
-curl --output recovery.efi https://boot.netboot.xyz/ipxe/netboot.xyz.efi
-```
-```
-mv recovery.efi /boot/efi/rescue/
+curl --output /boot/efi/rescue/recovery.efi https://boot.netboot.xyz/ipxe/netboot.xyz.efi
 ```
 ```
 printf "title recovery\nefi /efi/rescue/recovery.efi" > /boot/loader/entries/recovery.conf
