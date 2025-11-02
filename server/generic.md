@@ -447,9 +447,15 @@ delete semua service
 nvim /usr/lib/firewalld/zones/public.xml 
 ```
 
-delete semua service selain ssh,dan tamahkan
+delete semua service selain ssh,dan tambahkan
 ```
   <port protocol="tcp" port="51379"/>
+```
+```
+  <port protocol="tcp" port="9090"/>
+```
+```
+  <port protocol="tcp" port="9100"/>
 ```
 dibawah
 ```
@@ -765,9 +771,6 @@ sudo systemctl enable prometheus.service
 ```
 sudo systemctl enable prometheus-node-exporter.service
 ```
-```
-sudo systemctl stop firewalld
-```
 
 ### configuration
 ```
@@ -806,7 +809,7 @@ systemctl enable tuned
 tuned-adm profile througput-performance
 ```
 ```
-tuned-adm activer
+tuned-adm active
 ```
 output: througput-performance
 
