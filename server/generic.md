@@ -379,6 +379,9 @@ exit
 ```
 exit
 ```
+```
+useradd -d /var/games -g games games
+```
 
 ### hook clevis
 ```
