@@ -1077,7 +1077,7 @@ nvim /etc/systemd/system/aide.timer
 ```
 ```
 [Unit]
-Description=Aide check every day at 5AM
+Description=Aide check every 8 Hours
 
 [Timer]
 OnCalendar=*:0/8:00
