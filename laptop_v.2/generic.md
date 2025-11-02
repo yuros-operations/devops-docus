@@ -208,11 +208,11 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/data/home /mnt/home
 # 2. instalation package
 for intel
 ```
-pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd ethtool linux-hardened linux-firmware mkinitcpio intel-ucode libpwquality cracklib less bubblewrap-suid reflector
+pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd ethtool linux-hardened linux-firmware mkinitcpio intel-ucode libpwquality cracklib less bubblewrap-suid irqbalance reflector
 ```
 for amd
 ```
-pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd ethtool linux-hardened linux-firmware mkinitcpio amd-ucode libpwquality cracklib less bubblewrap-suid reflector
+pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd ethtool linux-hardened linux-firmware mkinitcpio amd-ucode libpwquality cracklib less bubblewrap-suid irqbalance reflector
 ```
 ### network configuration
 ```
@@ -319,6 +319,40 @@ passwd nama_user
 ```
 echo "nama_user ALL=(ALL:ALL) ALL" > /etc/sudoers.d/00_nama_user
 ```
+```
+su nama_user
+```
+```
+sudo su
+```
+```
+exit
+```
+```
+exit
+```
+### system user
+```
+useradd -m loki
+```
+```
+passwd loki
+```
+```
+echo "loki ALL=(ALL:ALL) ALL" > /etc/sudoers.d/00_nama_user
+```
+```
+su nama_user
+```
+```
+sudo su
+```
+```
+exit
+```
+```
+exit
+```
 
 ### skel
 
@@ -395,6 +429,452 @@ tar -xf /tmp/eggs/pkg.tar.xz -C /usr/share/icons/
 ```
 tar -xf /tmp/eggs/pkg.tar.xz -C /etc/skel/.icons/
 ```
+### firewelld
+
+```
+nvim /usr/lib/firewalld/zones/block.xml
+```
+```
+nvim /usr/lib/firewalld/zones/external.xml
+```
+```
+nvim /usr/lib/firewalld/zones/home.xml
+```
+```
+nvim /usr/lib/firewalld/zones/internal.xml 
+```
+ 
+delete semua service 
+
+```
+nvim /usr/lib/firewalld/zones/public.xml 
+```
+
+delete semua service selain ssh,dan tamahkan
+```
+  <port protocol="tcp" port="51379"/>
+```
+dibawah
+```
+<service name="ssh"/>
+```
+
+## os release
+
+```
+echo '' > /usr/lib/os-release
+```
+```
+nvim /usr/lib/os-release
+```
+```
+NAME="Blackbird"
+PRETTY_NAME="Blackbird"
+ID=blackbird
+BUILD_ID=rolling
+ANSI_COLOR="38;2;23;147;209"
+HOME_URL="https://blackbird.lektor.co.id/"
+DOCUMENTATION_URL="https://blackbird.lektor.co.id/"
+SUPPORT_URL="https://blackbird.lektor.co.id/support/"
+BUG_REPORT_URL="https://gitlab.blackbird.org/groups/issues"
+PRIVACY_POLICY_URL="https://blackbird.lektor.co.id/privacy-policy/"
+LOGO=blackbird-logo
+```
+
+## pamd
 
 
+To avoid the temptation of creating weak passwords, PAM must be properly configured to implement a password policy, as well as securely control the login process. Here we are going to implement this password policy:
+
+- Minimum length: 14 characters.
+- Required characters: Uppercase, lowercase, digits, and special characters.
+- Different characters between passwords: 3 characters.
+- Retries: 3 times.
+- Retries before locking: 6 times.
+- Time between each retry: 3 seconds.
+- Time before automatic account lockout: 10 minutes.
+- Storing method: SHA-512 in /etc/shadow.
+
+To achieve it, open /etc/pam.d/passwd in a text editor, comment all lines --considering you have not changed this file yet-- and add the next lines.
+```
+nvim /etc/pam.d/passwd
+```
+```
+password required pam_cracklib.so retry=3 minlen=14 difok=3 dcredit=-1 ucredit=-1 ocredit=-1 lcredit=-1
+password required pam_unix.so     use_authtok sha512 shadow
+```
+
+## package manager
+
+```
+nvim /etc/pacman.conf
+```
+```
+SigLevel = Required DatabaseOptional TrustedOnly
+```
+uncomment
+```
+UseSysLog
+Color
+VerbosePkgLists
+```
+
+## apparmor 
+
+```
+systemctl enable apparmor.service
+```
+
+## secure shell hardening
+
+```
+mv /etc/ssh/sshd_config /etc/backup
+```
+```
+nvim /etc/ssh/sshd_config
+```
+```
+# Include drop-in configurations
+Include /etc/ssh/sshd_config.d/*.conf
+
+Protocol 2
+
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+KexAlgorithms mlkem768x25519-sha256,sntrup761x25519-sha512,curve25519-sha256@libssh.org
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
+
+PermitRootLogin no
+PermitEmptyPasswords no
+LoginGraceTime 20
+MaxAuthTries 3
+MaxSessions 10
+ClientAliveCountMax 3
+Banner no
+
+AllowAgentForwarding no
+AllowTcpForwarding no
+X11Forwarding no
+
+# override default of no subsystems
+#Subsystem	sftp	/usr/lib/ssh/sftp-server
+```
+```
+systemctl enable ssh
+```
+
+
+## kernels harden
+
+```
+nvim /etc/sysctl.d/30-secs.conf
+```
+
+```
+## disable ipv6
+net.ipv6.conf.all.disable_ipv6 = 1
+
+# prevent the automatic loading of line disciplines
+# https://lore.kernel.org/patchwork/patch/1034150
+dev.tty.ldisc_autoload=0
+
+
+# additional protections for fifos, hardlinks, regular files, and symlinks
+# https://patchwork.kernel.org/patch/10244781
+# slightly tightened up from the systemd default values of "1" for each
+fs.protected_fifos=2
+fs.protected_regular=2
+
+
+## yama ptrac
+## https://theprivacyguide1.github.io/linux_hardening_guide
+kernel.yama.ptrace_scope=2
+
+
+# prevents processes from creating new io_uring instances
+# https://security.googleblog.com/2023/06/learnings-from-kctf-vrps-42-linux.html
+kernel.io_uring_disabled=2
+
+
+# disable unprivileged user namespaces
+# https://lwn.net/Articles/673597
+# (these two values are redundant, but not all kernels support the first one)
+user.max_user_namespaces=0
+
+
+# reverse path filtering to prevent some ip spoofing attacks
+# (default in some distributions)
+net.ipv4.conf.all.rp_filter=1
+net.ipv4.conf.default.rp_filter=1
+
+
+# reverse path filtering to prevent some ip spoofing attacks
+# (default in some distributions)
+net.ipv4.conf.all.rp_filter=1
+net.ipv4.conf.default.rp_filter=1
+
+
+# disable icmp redirects and RFC1620 shared media redirects
+net.ipv4.conf.all.accept_redirects=0
+net.ipv4.conf.all.secure_redirects=0
+net.ipv4.conf.all.send_redirects=0
+net.ipv4.conf.all.shared_media=0
+net.ipv4.conf.default.accept_redirects=0
+net.ipv4.conf.default.secure_redirects=0
+net.ipv4.conf.default.send_redirects=0
+net.ipv4.conf.default.shared_media=0
+net.ipv6.conf.all.accept_redirects=0
+net.ipv6.conf.default.accept_redirects=0
+
+
+# disable tcp timestamps to avoid leaking some system information
+# https://www.whonix.org/wiki/Disable_TCP_and_ICMP_Timestamps
+net.ipv4.tcp_timestamps=0
+
+# disable usb
+kernel.deny_new_usb=1
+
+#disable coredum
+kernel.core_pattern=|/bin/false
+```
+
+## module hardening
+
+### network
+```
+nvim /etc/modprobe.d/disable-network-protocols.conf
+```
+```
+install dccp /bin/true
+install sctp /bin/true
+install rds /bin/true
+install tipc /bin/true
+install n-hdlc /bin/true
+install ax25 /bin/true
+install netrom /bin/true
+install x25 /bin/true
+install rose /bin/true
+install decnet /bin/true
+install econet /bin/true
+install af_802154 /bin/true
+install ipx /bin/true
+install appletalk /bin/true
+install psnap /bin/true
+install p8023 /bin/true
+install p8022 /bin/true
+```
+
+### filesystem
+```
+nvim /etc/modprobe.d/disable-filesystem-protocols.conf
+```
+```
+install cramfs /bin/true
+install freevxfs /bin/true
+install jffs2 /bin/true
+install hfs /bin/true
+install hfsplus /bin/true
+install squashfs /bin/true
+install udf /bin/true
+```
+
+
+## loging config
+```
+mkdir -p /etc/systemd/journald.conf.d/
+```
+```
+nvim /etc/systemd/journald.conf.d/01-default.conf
+```
+```
+[Journal]
+SystemMaxUse=1G
+SystemKeepFree=500M
+RuntimeMaxUse=200M
+RuntimeKeepFree=50M
+MaxFileSec=1month
+Storage=persistent
+```
+
+## sleep config
+```
+mkdir -p /etc/systemd/sleep.conf.d/
+```
+```
+nvim /etc/systemd/sleep.conf.d/01-blackbird.conf
+```
+```
+[Sleep]
+AllowSuspend=no
+AllowHibernation=no
+AllowHybridSleep=no
+AllowSuspendThenHibernate=no
+```
+
+## coredump config
+```
+nvim /etc/systemd/coredump.conf
+```
+comment "[coredum]" dan tambah di akhir document
+```
+[Coredump]
+Storage=none
+ProcessSizeMax=0
+```
+
+## login sudoers
+```
+nvim /etc/sudo.conf
+```
+tambahkan pada bagian paling bawah
+```
+## Config Log
+Defaults logfile="/var/log/sudo.log"
+```
+
+## autoupdate
+```
+nvim /etc/systemd/system/update.service
+```
+```
+[Unit]
+Description=Run system update
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/pacman --sync --refresh --sysupgrade --noconfirm
+```
+```
+nvim /etc/systemd/system/update.timer
+```
+```
+[Unit]
+Description=Run the system update daily
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+Unit=update.service
+
+[Install]
+WantedBy=timers.target
+```
+```
+systemctl enable update.timer 
+```
+## prometheus 
+```
+sudo systemctl enable prometheus.service
+```
+```
+sudo systemctl enable prometheus-node-exporter.service
+```
+```
+sudo systemctl stop firewalld
+```
+
+### configuration
+```
+cd /etc/prometheus
+```
+```
+cp prometheus.yml prometheus.yml.bck
+```
+
+```
+nvim /etc/prometheus/prometheus.yml
+```
+tambahkan ke paling bawah
+```
+scrape_configs:
+   - job_name: 'prometheus'
+     static_configs:
+       - targets: ['localhost:9090']
+         labels:
+           app: "promotheus"
+   - job_name: 'node'
+     static_configs:
+       - targets: ['localhost:9100']
+         labels:
+           app: "exporter"
+```
+### network
+```
+systemctl enable systemd-networkd
+```
+```
+systemctl enable systemd-resolved
+```
+```
+systemctl enable sshd
+```
+```
+systemctl enable iwd
+```
+### boot directory
+#### intel server
+```
+rm /boot/initramfs-linux-hardened*
+```
+
+```
+mkdir -p /boot/efi /boot/efi/linux /boot/efi/systemd /boot/efi/rescue /boot/efi/boot
+```
+
+```
+mkdir /boot/kernel
+```
+
+```
+mv /boot/intel-ucode.img /boot/vmlinuz-linux-hardened /boot/kernel
+```
+
+
+#### amd server
+```
+rm /boot/initramfs-linux-hardened*
+```
+
+```
+mkdir -p /boot/efi /boot/efi/linux /boot/efi/systemd /boot/efi/rescue /boot/efi/boot
+```
+
+```
+mkdir /boot/kernel
+```
+
+```
+mv /boot/amd-ucode.img /boot/vmlinuz-linux-hardened /boot/kernel
+```
+### kernel parameter
+
+```
+mkdir /etc/cmdline.d
+```
+```
+touch /etc/cmdline.d/{01-boot.conf,02-mods.conf,03-secs.conf,04-perf.conf,05-nets.conf,06-misc.conf}
+```
+### 01-boot
+```
+echo "rd.luks.uuid=UUID=$(blkid -s UUID -o value /dev/nvme0n1p3) root=/dev/proc/root" > /etc/cmdline.d/01-boot.conf
+```
+
+### 03-secs
+```
+echo "lsm=landlock,lockdown,yama,integrity,apparmor,bpf lockdown=integrity init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 slab_nomerge vsyscall=none randomize_kstack_offset=1" > /etc/cmdline.d/03-secs.conf
+```
+
+### 04-perf
+```
+echo "ipv6.disable=1" > /etc/cmdline.d/04-perf.conf
+```
+### 06-misc
+
+```
+echo "rw quiet" > /etc/cmdline.d/06-misc.conf
+```
+
+## cryptab
+```
+echo "data UUID=$(blkid -s UUID -o value /dev/nvme0n1p4) none" >> /etc/crypttab
+```
 
