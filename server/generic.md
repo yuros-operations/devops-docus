@@ -39,16 +39,16 @@ cryptsetup luksOpen /dev/nvme0n1p4 data
 | partition | list | group  | name | size | mount                 | format |
 | --------- | ---- | ------ | ---- | ---- | --------------------- | ------ |
 | 2         | 1    | proc   | root | 5G   | /mnt                  | ext4   |
-| 2         | 3    | proc   | temp | 2G   | /mnt/tmp              | ext4   |
-| 2         | 5    | proc   | vars | 3G   | /mnt/var              | ext4   |
-| 2         | 2    | proc   | libs | 2G   | /mnt/var/usr/         | ext4   |
-| 2         | 2    | proc   | game | 1G   | /mnt/var/games/       | ext4   |
-| 2         | 6    | proc   | vlog | 2G   | /mnt/var/log/         | ext4   |
-| 2         | 7    | proc   | vaud | 1G   | /mnt/var/log/audit    | ext4   |
-| 2         | 8    | proc   | tmpfs| 256M | /mnt/tmp/             | ext4   |
-| 2         | 9    | proc   | vpac | 2G   | /mnt/var/cache/pacman | ext4   |
-| 2         | 10   | proc   | ring | 512M |                       | luks   |
-| 2         | 11   | proc   | home | 100% | /mnt/home             | ext4   |
+| 2         | 2    | proc   | vars | 3G   | /mnt/var              | ext4   |
+| 2         | 3    | proc   | libs | 2G   | /mnt/var/usr/         | ext4   |
+| 2         | 4    | proc   | game | 1G   | /mnt/var/games/       | ext4   |
+| 2         | 5    | proc   | vlog | 2G   | /mnt/var/log/         | ext4   |
+| 2         | 6    | proc   | vaud | 1G   | /mnt/var/log/audit    | ext4   |
+| 2         | 7    | proc   | vtmp | 512M | /mnt/var/tmp/         | ext4   |
+| 2         | 8    | proc   | vpac | 2G   | /mnt/var/cache/pacman | ext4   |
+| 2         | 9    | proc   | ring | 512M |                       | luks   |
+| 2         | 10   | proc   | home | 5G   | /mnt/home             | ext4   |
+| 2         | 11   | proc   | docs | 100% | /mnt/var/http         | ext4   |
 
 ```
 pvcreate /dev/mapper/proc
@@ -83,21 +83,6 @@ mkdir /mnt/boot
 ```
 mount -o uid=0,gid=0,fmask=0077,dmask=0077 /dev/nvme0n1p1 /mnt/boot
 ```
-
-### tmpfs
-```
-lvcreate -L 100M proc -n tmpfs
-```
-```
-mkfs.ext4 -b 4096 /dev/proc/tmpfs
-```
-```
-mkdir /mnt/tmp
-```
-```
-mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/tmpfs /mnt/tmp
-```
-
 ### vars
 ```
 lvcreate -L 3G proc -n vars
@@ -208,7 +193,7 @@ mkfs.ext4 -b 4096 /dev/mapper/lvm_keys
 ```
 ### home
 ```
-lvcreate -l100%FREE proc -n home
+lvcreate -L 5G proc -n home
 ```
 ```
 mkfs.ext4 -b 4096 /dev/proc/home
@@ -218,6 +203,19 @@ mkdir /mnt/home
 ```
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/home /mnt/home
+```
+### docs
+```
+lvcreate -l100%FREE proc -n docs
+```
+```
+mkfs.ext4 -b 4096 /dev/proc/docs
+```
+```
+mkdir -p /mnt/srv/http
+```
+```
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/docs /mnt/srv/http
 ```
 
 # 2.installation
