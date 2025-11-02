@@ -1,5 +1,4 @@
 # 1. Partitioning
-# 1. Partitioning
 
 ## physical volume
 
