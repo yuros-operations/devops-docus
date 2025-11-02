@@ -225,11 +225,11 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/home /mnt/home
 
 ## intel server
 ```
-pacstrap /mnt linux-hardened linux-firmware mkinitcpio intel-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync sudo debugedit fakeroot pkgconf bison gcc pcre flex wget make gcc curl --noconfirm
+pacstrap /mnt linux-hardened linux-firmware mkinitcpio intel-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync sudo debugedit fakeroot pkgconf bison gcc pcre flex wget make gcc curl prometheus prometheus-node-exporter --noconfirm
 ```
 ## amd server
 ```
-pacstrap /mnt linux-hardened linux-firmware mkinitcpio amd-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync sudo debugedit fakeroot pkgconf bison gcc pcre flex wget make gcc curl  --noconfirm
+pacstrap /mnt linux-hardened linux-firmware mkinitcpio amd-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync sudo debugedit fakeroot pkgconf bison gcc pcre flex wget make gcc curl prometheus prometheus-node-exporter --noconfirm
 ```
 ```
 mkdir -p /mnt/etc/backup
@@ -757,6 +757,42 @@ WantedBy=timers.target
 ```
 ```
 systemctl enable update.timer 
+```
+## prometheus 
+```
+sudo systemctl enable prometheus.service
+```
+```
+sudo systemctl enable prometheus-node-exporter.service
+```
+```
+sudo systemctl stop firewalld
+```
+
+### configuration
+```
+cd /etc/prometheus
+```
+```
+cp prometheus.yml prometheus.yml.bck
+```
+
+```
+nvim /etc/prometheus/prometheus.yml
+```
+tambahkan ke paling bawah
+```
+scrape_configs:
+   - job_name: 'prometheus'
+     static_configs:
+       - targets: ['localhost:9090']
+         labels:
+           app: "promotheus"
+   - job_name: 'node'
+     static_configs:
+       - targets: ['localhost:9100']
+         labels:
+           app: "exporter"
 ```
 ### network
 ```
