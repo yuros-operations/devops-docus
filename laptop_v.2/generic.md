@@ -49,7 +49,7 @@ cryptsetup luksOpen /dev/partisi_data data
 | 2         | 8    | proc  | tmpfs|  /mnt/tmp                 | ext4   |
 | 2         | 9    | proc  | vtmp |  /mnt/var/tmp             | ext4   |
 
-#### minimum disk layout root
+#### minimum disk layout root dengan minimum ram 4GB
 | partition | list  | group | name | size | mount                    | format |
 | --------- | ----  | ----- | ---- |----  | -------------------------| ------ |
 | 2         | 1     |       | boot | 320M |/mnt/boot                 | vfat   |
@@ -62,6 +62,21 @@ cryptsetup luksOpen /dev/partisi_data data
 | 2         | 8     | proc  | vpac | 2G   |/mnt/var/cache/pacman     | ext4   |
 | 2         | 9     | proc  | ring | 512M |                          | ext4   |
 | 2         | 10    | proc  | tmpfs| 1G   |/mnt/tmp                  | ext4   |
+| 2         | 11    | proc  | vtmp | 2G   |/mnt/var/tmp              | ext4   |
+
+#### minimum disk layout root dengan minimum ram 2GB
+| partition | list  | group | name | size | mount                    | format |
+| --------- | ----  | ----- | ---- |----  | -------------------------| ------ |
+| 2         | 1     |       | boot | 320M |/mnt/boot                 | vfat   |
+| 2         | 2     | proc  | root | 13G  |/mnt                      | ext4   |
+| 2         | 3     | proc  | opts | 10G  |/mnt/opt                  | ext4   |
+| 2         | 4     | proc  | vars | 5G   |/mnt/var                  | ext4   |
+| 2         | 5     | proc  | libs | 1G   |/mnt/var/usr/             | ext4   |
+| 2         | 6     | proc  | vlog | 1G   |/mnt/var/log              | ext4   |
+| 2         | 7     | proc  | vaud | 512M |/mnt/var/log/audit        | ext4   |
+| 2         | 8     | proc  | vpac | 2G   |/mnt/var/cache/pacman     | ext4   |
+| 2         | 9     | proc  | ring | 512M |                          | ext4   |
+| 2         | 10    | proc  | temp | 1G   |/mnt/tmp                  | ext4   |
 | 2         | 11    | proc  | vtmp | 2G   |/mnt/var/tmp              | ext4   |
 
 #### data disk group
