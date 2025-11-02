@@ -208,11 +208,11 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/data/home /mnt/home
 # 2. instalation package
 for intel
 ```
-pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd ethtool linux-hardened linux-firmware mkinitcpio intel-ucode libpwquality cracklib less bubblewrap-suid irqbalance reflector
+pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd ethtool linux-hardened linux-firmware mkinitcpio intel-ucode libpwquality cracklib less bubblewrap-suid irqbalance reflector tuned
 ```
 for amd
 ```
-pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd ethtool linux-hardened linux-firmware mkinitcpio amd-ucode libpwquality cracklib less bubblewrap-suid irqbalance reflector
+pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd ethtool linux-hardened linux-firmware mkinitcpio amd-ucode libpwquality cracklib less bubblewrap-suid irqbalance reflector tuned
 ```
 ### network configuration
 ```
@@ -797,6 +797,22 @@ scrape_configs:
          labels:
            app: "exporter"
 ```
+### irqbalance
+```
+systemctl enable irqbalance
+```
+### tuned
+```
+systemctl enable tuned
+```
+```
+tuned-adm profile througput-performance
+```
+```
+tuned-adm activer
+```
+output: througput-performance
+
 ### network
 ```
 systemctl enable systemd-networkd
@@ -855,7 +871,7 @@ touch /etc/cmdline.d/{01-boot.conf,02-mods.conf,03-secs.conf,04-perf.conf,05-net
 ```
 ### 01-boot
 ```
-echo "rd.luks.uuid=UUID=$(blkid -s UUID -o value /dev/nvme0n1p3) root=/dev/proc/root" > /etc/cmdline.d/01-boot.conf
+echo "rd.luks.uuid=$(blkid -s UUID -o value /dev/partisi_root) root=/dev/proc/root" > /etc/cmdline.d/01-boot.conf
 ```
 
 ### 03-secs
@@ -875,6 +891,425 @@ echo "rw quiet" > /etc/cmdline.d/06-misc.conf
 
 ## cryptab
 ```
-echo "data UUID=$(blkid -s UUID -o value /dev/nvme0n1p4) none" >> /etc/crypttab
+echo "data UUID=$(blkid -s UUID -o value /dev/partisi_data) none" >> /etc/crypttab
+```
+### initram directory
+
+```
+rm -fr /etc/mkinitcpio.conf.d
+```
+```
+mv /etc/mkinitcpio.conf /etc/mkinitcpio.d/default.conf
+```
+```
+nvim /etc/mkinitcpio.d/default.conf
+```
+cari lalu commenting
+```
+HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck)
+```
+tambahkan
+```
+HOOKS=(base systemd autodetect microcode modconf kms keyboard keymap consolefont sd-vconsole sd-encrypt lvm2 block filesystems fsck)
+```
+tambahkan pada bagian binaries
+```
+/usr/bin/curl
+```
+#### configure linux preset
+
+```
+nvim /etc/mkinitcpio.d/linux-hardened.preset
+```
+uncommenting 
+
+```
+#ALL_config="/etc/mkinitcpio.conf"
+```
+lalu ubah
+```
+ALL_config="/etc/mkinitcpio.d/default.conf"
+```
+edit
+```
+ALL_kver="/boot/vmlinuz-linux-hardened"
+```
+menjadi
+```
+ALL_kver="/boot/kernel/vmlinuz-linux-hardened" 
+```
+edit
+```
+PRESETS=('default' 'fallback')
+```
+lalu menjadi
+```
+PRESETS=('default')
+```
+uncommenting
+```
+#default_uki="/efi/EFI/Linux/arch-linux-hardened.efi"
+```
+lalu ubah
+```
+default_uki="/boot/efi/linux/blackbird-hardened.efi"
+```
+commenting
+```
+fallback_image="/boot/initramfs-linux-hardened-fallback.img"
+```
+```
+fallback_options="-S autodetect"
+```
+```
+bootctl --path=/boot install
+```
+```
+mkinitcpio -P
+```
+### recovery
+```
+curl --output recovery.efi https://boot.netboot.xyz/ipxe/netboot.xyz.efi
+```
+```
+mv recovery.efi /boot/efi/rescue/
+```
+```
+printf "title recovery\nefi /efi/rescue/recovery.efi" > /boot/loader/entries/recovery.conf
+```
+```
+cat /boot/loader/entries/recovery.conf
+```
+### instrusion detection
+
+```
+cd /tmp
+```
+```
+pkg-config --libs --cflags glib-2.0
+```
+```
+cd /dev/swap
+```
+```
+wget https://github.com/aide/aide/releases/download/v0.19.2/aide-0.19.2.tar.gz
+```
+```
+tar xf aide-0.19.2.tar.gz
+```
+```
+cd aide-0.19.2
+```
+```
+./configure --with-zlib --with-posix-acl --with-xattr --with-curl --with-locale --with-syslog-ident --with-config-file=/etc/aide.conf
+```
+```
+make && make install
+```
+```
+nvim /etc/systemd/system/aide.service
+```
+```
+[Unit]
+Description=Aide Check
+ConditionACPower=true
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/aide --check
+
+[Install]
+WantedBy=multi-user.target
+```
+```
+nvim /etc/systemd/system/aide.timer
+```
+```
+[Unit]
+Description=Aide check every day at 5AM
+
+[Timer]
+OnCalendar=*:0/8:00
+Unit=aidecheck.service
+
+[Install]
+WantedBy=multi-user.target
+```
+```
+mkdir -p /var/log/aide
+```
+```
+mkdir -p /var/lib/aide
+```
+```
+touch /var/log/aide/aide.log 
+```
+```
+nvim /etc/aide.conf 
+```
+```
+# Example configuration file for AIDE.
+# More information about configuration options available in the aide.conf manpage.
+# Inspired from https://src.fedoraproject.org/rpms/aide/raw/rawhide/f/aide.conf
+
+# ┌───────────────────────────────────────────────────────────────┐
+# │ CONTENTS OF aide.conf                                         │
+# ├───────────────────────────────────────────────────────────────┘
+# │
+# ├──┐VARIABLES
+# │  ├── DATABASE
+# │  └── REPORT
+# ├──┐RULES
+# │  ├── LIST OF ATTRIBUTES
+# │  ├── LIST OF CHECKSUMS
+# │  └── AVAILABLE RULES
+# ├──┐PATHS
+# │  ├──┐EXCLUDED
+# │  │  ├── ETC
+# │  │  ├── USR
+# │  │  └── VAR
+# │  └──┐INCLUDED
+# │     ├── ETC
+# │     ├── USR
+# │     ├── VAR
+# │     └── OTHERS
+# │
+# └───────────────────────────────────────────────────────────────
+
+# ################################################################ VARIABLES
+
+# ################################ DATABASE
+
+@@define DBDIR /var/lib/aide
+@@define LOGDIR /var/log/aide
+
+# The location of the database to be read.
+database_in=file:@@{DBDIR}/aide.db.gz
+
+# The location of the database to be written.
+#database_out=sql:host:port:database:login_name:passwd:table
+#database_out=file:aide.db.new
+database_out=file:@@{DBDIR}/aide.db.new.gz
+
+# Whether to gzip the output to database
+gzip_dbout=yes
+
+# ################################ REPORT
+
+# Default.
+log_level=warning
+report_level=changed_attributes
+
+report_url=file:@@{LOGDIR}/aide.log
+report_url=stdout
+#report_url=stderr
+#NOT IMPLEMENTED report_url=mailto:root@foo.com
+#NOT IMPLEMENTED report_url=syslog:LOG_AUTH
+
+# ################################################################ RULES
+
+# ################################ LIST OF ATTRIBUTES
+
+# These are the default parameters we can check against.
+#p:             permissions
+#i:             inode:
+#n:             number of links
+#u:             user
+#g:             group
+#s:             size
+#b:             block count
+#m:             mtime
+#a:             atime
+#c:             ctime
+#S:             check for growing size
+#acl:           Access Control Lists
+#selinux        SELinux security context (must be enabled at compilation time)
+#xattrs:        Extended file attributes
+
+# ################################ LIST OF CHECKSUMS
+
+#md5:           md5 checksum
+#sha1:          sha1 checksum
+#sha256:        sha256 checksum
+#sha512:        sha512 checksum
+#rmd160:        rmd160 checksum
+#tiger:         tiger checksum
+#haval:         haval checksum (MHASH only)
+#gost:          gost checksum (MHASH only)
+#crc32:         crc32 checksum (MHASH only)
+#whirlpool:     whirlpool checksum (MHASH only)
+
+# ################################ AVAILABLE RULES
+
+# These are the default rules
+#R:             p+i+l+n+u+g+s+m+c+md5
+#L:             p+i+l+n+u+g
+#E:             Empty group
+#>:             Growing logfile p+l+u+g+i+n+S
+
+# You can create custom rules - my home made rule definition goes like this 
+ALLXTRAHASHES = sha1+rmd160+sha256+sha512+whirlpool+tiger+haval+gost+crc32
+ALLXTRAHASHES = sha1+rmd160+sha256+sha512+tiger
+# Everything but access time (Ie. all changes)
+EVERYTHING = R+ALLXTRAHASHES
+
+# Sane, with multiple hashes
+# NORMAL = R+rmd160+sha256+whirlpool
+# NORMAL = R+sha256+sha512
+NORMAL = p+i+l+n+u+g+s+m+c+sha256
+
+# For directories, don't bother doing hashes
+DIR = p+i+n+u+g+acl+xattrs
+
+# Access control only
+PERMS = p+i+u+g+acl
+
+# Logfile are special, in that they often change
+LOG = >
+
+# Just do sha256 and sha512 hashes
+FIPSR = p+i+n+u+g+s+m+c+acl+xattrs+sha256
+LSPP = FIPSR+sha512
+
+# Some files get updated automatically, so the inode/ctime/mtime change
+# but we want to know when the data inside them changes
+DATAONLY = p+n+u+g+s+acl+xattrs+sha256
+
+# ################################################################ PATHS
+
+# Next decide what directories/files you want in the database.
+
+# ################################ EXCLUDED
+
+# ################ ETC
+
+# Ignore backup files
+!/etc/.*~
+
+# Ignore mtab
+!/etc/mtab
+
+# ################ USR
+
+# These are too volatile
+!/usr/src
+!/usr/tmp
+
+# ################ VAR
+
+# Ignore logs
+!/var/lib/pacman/.*
+!/var/cache/.*
+!/var/log/.*  
+!/var/log/aide.log
+!/var/run/.*  
+!/var/spool/.*
+
+# ################################ INCLUDED
+
+# ################ ETC
+
+# Check only permissions, inode, user and group for /etc, but cover some important files closely.
+/etc                               PERMS
+/etc/aliases                       FIPSR
+/etc/at.allow                      FIPSR
+/etc/at.deny                       FIPSR
+/etc/audit/                        FIPSR
+/etc/bash_completion.d/            NORMAL
+/etc/bashrc                        NORMAL
+/etc/cron.allow                    FIPSR
+/etc/cron.daily/                   FIPSR
+/etc/cron.deny                     FIPSR
+/etc/cron.d/                       FIPSR
+/etc/cron.hourly/                  FIPSR
+/etc/cron.monthly/                 FIPSR
+/etc/crontab                       FIPSR
+/etc/cron.weekly/                  FIPSR
+/etc/cups                          FIPSR
+/etc/exports                       NORMAL
+/etc/fstab                         NORMAL
+/etc/group                         NORMAL
+/etc/grub/                         FIPSR
+/etc/gshadow                       NORMAL
+/etc/hosts.allow                   NORMAL
+/etc/hosts.deny                    NORMAL
+/etc/hosts                         FIPSR
+/etc/inittab                       FIPSR
+/etc/issue                         FIPSR
+/etc/issue.net                     FIPSR
+/etc/ld.so.conf                    FIPSR
+/etc/libaudit.conf                 FIPSR
+/etc/localtime                     FIPSR
+/etc/login.defs                    FIPSR
+/etc/login.defs                    NORMAL
+/etc/logrotate.d                   NORMAL
+/etc/modprobe.conf                 FIPSR
+/etc/nscd.conf                     NORMAL
+/etc/pam.d                         FIPSR
+/etc/passwd                        NORMAL
+/etc/postfix                       FIPSR
+/etc/profile.d/                    NORMAL
+/etc/profile                       NORMAL
+/etc/rc.d                          FIPSR
+/etc/resolv.conf                   DATAONLY
+/etc/securetty                     FIPSR
+/etc/securetty                     NORMAL
+/etc/security                      FIPSR
+/etc/security/opasswd              NORMAL
+/etc/shadow                        NORMAL
+/etc/skel                          NORMAL
+/etc/ssh/ssh_config                FIPSR
+/etc/ssh/sshd_config               FIPSR
+/etc/stunnel                       FIPSR
+/etc/sudoers                       NORMAL
+/etc/sysconfig                     FIPSR
+/etc/sysctl.conf                   FIPSR
+/etc/vsftpd.ftpusers               FIPSR
+/etc/vsftpd                        FIPSR
+/etc/X11/                          NORMAL
+/etc/zlogin                        NORMAL
+/etc/zlogout                       NORMAL
+/etc/zprofile                      NORMAL
+/etc/zshrc                         NORMAL
+
+# ################ USR
+
+/usr                               NORMAL
+/usr/sbin/stunnel                  FIPSR
+
+# ################ VAR
+
+/var/log/faillog                   FIPSR
+/var/log/lastlog                   FIPSR
+/var/spool/at                      FIPSR
+/var/spool/cron/root               FIPSR
+
+# ################ OTHERS
+
+/boot                              NORMAL
+/bin                               NORMAL
+/lib                               NORMAL
+/lib64                             NORMAL
+/opt                               NORMAL
+/root                              NORMAL
+```
+```
+aide --init
+```
+```
+mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+```
+```
+exit
+```
+```
+umount -R /mnt
+```
+```
+reboot
+```
+# 3. post instalation
+```
+passwd -l root
 ```
 
