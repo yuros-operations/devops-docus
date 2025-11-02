@@ -817,7 +817,7 @@ scrape_configs:
 systemctl enable irqbalance
 ```
 ```
-mkdir -p /usr/lib/systemd/irqbalance.service.d/
+mkdir -p /usr/lib/systemd/system/irqbalance.service.d/
 ```
 ```
 cat > /usr/lib/systemd/system/irqbalance.service.d/10-no-private-users.conf <<EOF
