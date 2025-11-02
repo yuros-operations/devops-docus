@@ -61,7 +61,6 @@ cryptsetup luksOpen /dev/partisi_data data
 | 2         | 7     | proc  | vaud | 512M |/mnt/var/log/audit        | ext4   |
 | 2         | 8     | proc  | vpac | 2G   |/mnt/var/cache/pacman     | ext4   |
 | 2         | 9     | proc  | ring | 512M |                          | ext4   |
-| 2         | 10    | proc  | tmpfs| 1G   |/mnt/tmp                  | ext4   |
 | 2         | 11    | proc  | vtmp | 2G   |/mnt/var/tmp              | ext4   |
 
 #### minimum disk layout root dengan minimum ram 2GB
@@ -145,6 +144,19 @@ mkdir /mnt/var
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vars /mnt/var
 ```
+### libs
+```
+lvcreate -L [ size in G | M ] proc -n libs
+```
+```
+mkfs.ext4 -b 4096 /dev/proc/libs
+```
+```
+mkdir /mnt/var/usr
+```
+```
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/libs /mnt/var/usr
+```
 ### vlog
 ```
 lvcreate -L [ size in G | M ] proc -n vlog
@@ -197,18 +209,18 @@ cryptsetup luksOpen /dev/proc/ring proc_keys
 ```
 mkfs.ext4 -b 4096 /dev/mapper/proc_keys
 ```
-### tmpfs
+### temp
 ```
-lvcreate -L [ size in G | M ] proc -n tmpfs
+lvcreate -L [ size in G | M ] proc -n temp
 ```
 ```
-mkfs.ext4 -b 4096 /dev/proc/tmpfs
+mkfs.ext4 -b 4096 /dev/proc/temp
 ```
 ```
 mkdir /mnt/tmp
 ```
 ```
-mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/tmpfs /mnt/tmp
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/temp /mnt/tmp
 ```
 ### vtmp
 ```
