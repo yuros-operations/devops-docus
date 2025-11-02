@@ -48,7 +48,7 @@ cryptsetup luksOpen /dev/nvme0n1p4 data
 | 2         | 8    | proc   | vpac | 2G   | /mnt/var/cache/pacman | ext4   |
 | 2         | 9    | proc   | ring | 512M |                       | luks   |
 | 2         | 10   | proc   | home | 5G   | /mnt/home             | ext4   |
-| 2         | 11   | proc   | docs | 100% | /mnt/var/http         | ext4   |
+| 2         | 11   | proc   | docs | 100% | /mnt/srv/http         | ext4   |
 
 ```
 pvcreate /dev/mapper/proc
