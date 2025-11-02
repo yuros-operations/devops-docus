@@ -206,3 +206,33 @@ mkdir /mnt/home
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/data/home /mnt/home
 ```
+# 2. instalation package
+for intel
+```
+pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd ethtool linux-hardened linux-firmware mkinitcpio intel-ucode libpwquality cracklib less bubblewrap-suid reflector
+```
+for amd
+```
+pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd ethtool linux-hardened linux-firmware mkinitcpio amd-ucode libpwquality cracklib less bubblewrap-suid reflector
+```
+### network configuration
+```
+mkdir /mnt/var/lib/iwd
+```
+```
+cp /var/lib/iwd/*.psk /mnt/var/lib/iwd
+```
+```
+cp /etc/systemd/network/* /mnt/etc/systemd/network/
+```
+### fstab
+```
+genfstab -U /mnt > /mnt/etc/fstab
+```
+### chrooting
+```
+arch-chroot /mnt
+```
+
+
+
