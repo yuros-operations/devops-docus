@@ -41,12 +41,28 @@ cryptsetup luksOpen /dev/partisi_data data
 | 2         | 1    | proc  | root |  /mnt                     | ext4   |
 | 2         | 2    | proc  | opts |  /mnt/opt                 | ext4   |
 | 2         | 3    | proc  | vars |  /mnt/var                 | ext4   |
+| 2         | 2    | proc  | libs | /mnt/var/usr/             | ext4   |
 | 2         | 4    | proc  | vlog |  /mnt/var/log             | ext4   |
 | 2         | 5    | proc  | vaud |  /mnt/var/log/audit       | ext4   |
 | 2         | 6    | proc  | vpac |  /mnt/var/cache/pacman    | ext4   |
 | 2         | 7    | proc  | ring |                           | ext4   |
-| 2         | 8    | proc  | temp |  /mnt/tmp                 | ext4   |
+| 2         | 8    | proc  | tmpfs|  /mnt/tmp                 | ext4   |
 | 2         | 9    | proc  | vtmp |  /mnt/var/tmp             | ext4   |
+
+#### minimum disk layout root
+| partition | list | group | name | size | mount                    | format |
+| --------- | ---- | ----- | ---- |----  | -------------------------| ------ |
+| 2         | 1    |       | boot | 320M |/mnt/boot                 | vfat   |
+| 2         | 1    | proc  | root | 13G  |/mnt                      | ext4   |
+| 2         | 2    | proc  | opts | 10G  |/mnt/opt                  | ext4   |
+| 2         | 3    | proc  | vars | 5G   |/mnt/var                  | ext4   |
+| 2         | 2    | proc  | libs | 1G   |/mnt/var/usr/             | ext4   |
+| 2         | 4    | proc  | vlog | 1G   |/mnt/var/log              | ext4   |
+| 2         | 5    | proc  | vaud | 512M |/mnt/var/log/audit        | ext4   |
+| 2         | 6    | proc  | vpac | 2G   |/mnt/var/cache/pacman     | ext4   |
+| 2         | 7    | proc  | ring | 512M |                          | ext4   |
+| 2         | 9    | proc  | tmpfs| 2G   |/mnt/tmp                  | ext4   |
+| 2         | 9    | proc  | vtmp | 2G   |/mnt/var/tmp              | ext4   |
 
 #### data disk group
 | partition | list | group | name |  mount                       | format |
@@ -166,18 +182,18 @@ cryptsetup luksOpen /dev/proc/ring proc_keys
 ```
 mkfs.ext4 -b 4096 /dev/mapper/proc_keys
 ```
-### temp
+### tmpfs
 ```
-lvcreate -L [ size in G | M ] proc -n temp
+lvcreate -L [ size in G | M ] proc -n tmpfs
 ```
 ```
-mkfs.ext4 -b 4096 /dev/proc/temp
+mkfs.ext4 -b 4096 /dev/proc/tmpfs
 ```
 ```
 mkdir /mnt/tmp
 ```
 ```
-mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/temp /mnt/tmp
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/tmpfs /mnt/tmp
 ```
 ### vtmp
 ```
