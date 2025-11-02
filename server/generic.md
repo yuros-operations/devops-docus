@@ -225,11 +225,11 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/home /mnt/home
 
 ## intel server
 ```
-pacstrap /mnt linux-hardened linux-firmware mkinitcpio intel-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync sudo debugedit fakeroot pkgconf bison gcc pcre flex wget make gcc curl prometheus prometheus-node-exporter --noconfirm
+pacstrap /mnt linux-hardened linux-firmware mkinitcpio intel-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync sudo debugedit fakeroot pkgconf bison gcc pcre flex wget make gcc curl prometheus prometheus-node-exporter irqbalance tuned --noconfirm
 ```
 ## amd server
 ```
-pacstrap /mnt linux-hardened linux-firmware mkinitcpio amd-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync sudo debugedit fakeroot pkgconf bison gcc pcre flex wget make gcc curl prometheus prometheus-node-exporter --noconfirm
+pacstrap /mnt linux-hardened linux-firmware mkinitcpio amd-ucode tang clevis mkinitcpio-nfs-utils luksmeta libpwquality cracklib git base neovim lvm2 btrfs-progs openssh polkit ethtool iptables-nft firewalld apparmor rsync sudo debugedit fakeroot pkgconf bison gcc pcre flex wget make gcc curl prometheus prometheus-node-exporter irqbalance tuned --noconfirm
 ```
 ```
 mkdir -p /mnt/etc/backup
@@ -794,6 +794,22 @@ scrape_configs:
          labels:
            app: "exporter"
 ```
+### irqbalance
+```
+systemctl enable irqbalance
+```
+### tuned
+```
+systemctl enable tuned
+```
+```
+tuned-adm profile througput-performance
+```
+```
+tuned-adm activer
+```
+output: througput-performance
+
 ### network
 ```
 nvim /etc/systemd/network/20-ethernet.network
