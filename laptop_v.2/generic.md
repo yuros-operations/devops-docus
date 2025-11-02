@@ -454,6 +454,13 @@ delete semua service selain ssh,dan tamahkan
 ```
   <port protocol="tcp" port="51379"/>
 ```
+
+```
+  <port protocol="tcp" port="9090"/>
+```
+```
+  <port protocol="tcp" port="9100"/>
+```
 dibawah
 ```
 <service name="ssh"/>
@@ -767,9 +774,6 @@ sudo systemctl enable prometheus.service
 ```
 ```
 sudo systemctl enable prometheus-node-exporter.service
-```
-```
-sudo systemctl stop firewalld
 ```
 
 ### configuration
