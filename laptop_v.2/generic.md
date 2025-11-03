@@ -251,11 +251,11 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/data/home /mnt/home
 # 2. instalation package
 for intel
 ```
-pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd  tang clevis mkinitcpio-nfs-utils luksmeta ethtool linux-hardened linux-firmware mkinitcpio intel-ucode libpwquality cracklib less bubblewrap-suid irqbalance reflector tuned tuned-ppd libpam-google-authenticator firewalld apparmor sof-firmware qrencode rsync grsync nginx prometheus prometheus-node-exporter 
+pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd  tang clevis mkinitcpio-nfs-utils luksmeta ethtool linux-hardened linux-firmware mkinitcpio intel-ucode libpwquality cracklib less bubblewrap-suid irqbalance reflector tuned tuned-ppd libpam-google-authenticator firewalld apparmor sof-firmware qrencode rsync grsync nginx prometheus prometheus-node-exporter wget
 ```
 for amd
 ```
-pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd  tang clevis mkinitcpio-nfs-utils luksmeta ethtool linux-hardened linux-firmware mkinitcpio amd-ucode libpwquality cracklib less bubblewrap-suid irqbalance reflector tuned tuned-ppd libpam-google-authenticator firewalld apparmor sof-firmware qrencode rsync grsync prometheus prometheus-node-exporter nginx
+pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd  tang clevis mkinitcpio-nfs-utils luksmeta ethtool linux-hardened linux-firmware mkinitcpio amd-ucode libpwquality cracklib less bubblewrap-suid irqbalance reflector tuned tuned-ppd libpam-google-authenticator firewalld apparmor sof-firmware qrencode rsync grsync prometheus prometheus-node-exporter nginx wget
 ```
 ### network configuration
 ```
