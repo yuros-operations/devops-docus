@@ -1621,6 +1621,10 @@ sudo flatpak install --system flathub com.google.Chrome
 sudo flatpak install --system flathub com.visualstudio.code
 ```
 
+### finance
+```
+sudo flatpak install flathub fr.free.Homebank
+```
 ### media player
 
 #### installation
