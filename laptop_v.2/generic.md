@@ -669,6 +669,7 @@ To achieve it, open /etc/pam.d/passwd in a text editor, comment all lines --cons
 nvim /etc/pam.d/passwd
 ```
 ```
+password	optional	pam_gnome_keyring.so
 password required pam_cracklib.so retry=3 minlen=14 difok=3 dcredit=-1 ucredit=-1 ocredit=-1 lcredit=-1
 password required pam_unix.so     use_authtok sha512 shadow
 ```
