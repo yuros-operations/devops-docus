@@ -1566,7 +1566,7 @@ sudo mkdir /etc/sddm.conf.d/
 sudo mv /usr/share/sddm/themes/claw/sddm-default.conf /etc/sddm.conf.d/default.conf
 ```
 ```
-sudo vim /etc/sddm.conf.d/default.conf
+sudo nvim /etc/sddm.conf.d/default.conf
 ```
 change at `[Theme]`
 ```
