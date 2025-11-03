@@ -1235,7 +1235,7 @@ Description=Aide check every 2 Hours
 
 [Timer]
 OnCalendar=*:0/2:00
-Unit=aidecheck.service
+Unit=aide.service
 
 [Install]
 WantedBy=multi-user.target
