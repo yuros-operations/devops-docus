@@ -58,7 +58,7 @@ cryptsetup luksOpen /dev/nvme0n1p4 data
 #### minimum disk layout root
 | partition | list  | group | name | size | mount                    | format |
 | --------- | ----  | ----- | ---- |----  | -------------------------| ------ |
-| 2         | 1     |       | boot | 320M |/mnt/boot                 | vfat   |
+| 2         | 1     |       | boot | 1G   |/mnt/boot                 | vfat   |
 | 2         | 2     | proc  | root | 10G  |/mnt                      | ext4   |
 | 2         | 3     | proc  | opts | 15G  |/mnt/opt                  | ext4   |
 | 2         | 4     | proc  | vars | 2G   |/mnt/var                  | ext4   |
