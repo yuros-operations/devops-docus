@@ -988,7 +988,7 @@ systemctl enable tuned
 systemctl enable tuned-ppd.service
 ```
 
-output: balance
+
 
 ### network
 #### nginx
