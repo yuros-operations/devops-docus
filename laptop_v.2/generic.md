@@ -7,86 +7,73 @@
 | ---- | --------- | ----------------- | ----- | ----- | -------- |  ------ | -------------------------- |
 | 0    | 1         | efi               | false | false | boot     |  fat 32 | /boot                      |
 | 0    | 2         | linux file system | true  | false | keys     |  luks   | none                       |
-| 0    | 3         | linux root (x86_64) | true  | true  | proc |  luks   | see logical layout point 1 |
+| 0    | 3         | linux filesystems | true  | true  | proc |  luks   | see logical layout point 1 |
 | 0    | 4         | linux home        | true  | true  | data |  luks   | see logical layout point 1 |
 
 gunakan cfdisk untuk membuat physical volume sesuai dengan guide line
 
 ### disk encryption
 ```
-cryptsetup luksFormat --sector-size=4096 /dev/partisi_keys
+cryptsetup luksFormat --sector-size=4096 /dev/nvme0n1p2
 ```
 
 ```
-cryptsetup luksFormat --sector-size=4096 /dev/partisi_root
+cryptsetup luksFormat --sector-size=4096 /dev/nvme0n1p3
 ```
 
 ```
-cryptsetup luksFormat --sector-size=4096 /dev/partisi_data
+cryptsetup luksFormat --sector-size=4096 /dev/nvme0n1p4
 ```
 
 ```
-cryptsetup luksOpen /dev/partisi_root proc
+cryptsetup luksOpen /dev/nvme0n1p3 proc
 ```
 
 ```
-cryptsetup luksOpen /dev/partisi_data data
+cryptsetup luksOpen /dev/nvme0n1p4 data
 ```
 
 ## logical volume
 
 ### disk layout root
-| partition | list | group | name |  mount                    | format |
-| --------- | ---- | ----- | ---- |  -------------------------| ------ |
-| 2         | 1    | proc  | root |  /mnt                     | ext4   |
-| 2         | 2    | proc  | opts |  /mnt/opt                 | ext4   |
-| 2         | 3    | proc  | vars |  /mnt/var                 | ext4   |
-| 2         | 2    | proc  | libs | /mnt/var/usr/             | ext4   |
-| 2         | 4    | proc  | vlog |  /mnt/var/log             | ext4   |
-| 2         | 5    | proc  | vaud |  /mnt/var/log/audit       | ext4   |
-| 2         | 6    | proc  | vpac |  /mnt/var/cache/pacman    | ext4   |
-| 2         | 7    | proc  | ring |                           | ext4   |
-| 2         | 8    | proc  | tmpfs|  /mnt/tmp                 | ext4   |
-| 2         | 9    | proc  | vtmp |  /mnt/var/tmp             | ext4   |
+| partition | list  | group | name |  mount                    | format |
+| --------- | ----  | ----- | ---- |  -------------------------| ------ |
+| 2         | 1     | proc  | root |  /mnt                     | ext4   |
+| 2         | 2     | proc  | opts |  /mnt/opt                 | ext4   |
+| 2         | 3     | proc  | vars |  /mnt/var                 | ext4   |
+| 2         | 4     | proc  | libs | /mnt/var/usr/             | ext4   |
+| 2         | 5     | proc  | game | /mnt/var/games/           | ext4   |
+| 2         | 6     | proc  | vlog |  /mnt/var/log             | ext4   |
+| 2         | 7     | proc  | vaud |  /mnt/var/log/audit       | ext4   |
+| 2         | 8     | proc  | vtmp |  /mnt/var/tmp             | ext4   |
+| 2         | 9     | proc  | vpac |  /mnt/var/cache/pacman    | ext4   |
+| 2         | 10    | proc  | ring |                           | ext4   |
+| 2         | 12    | proc  | docs |  /mnt/var/http            | ext4   |
 
-#### minimum disk layout root ram 4GB
+### disk layout data
+| partition | list  | group | name |  mount                    | format |
+| --------- | ----  | ----- | ---- |  -------------------------| ------ |
+| 2         | 1     | data  | home |  /mnt/home                | ext4   |
+
+#### minimum disk layout root
 | partition | list  | group | name | size | mount                    | format |
 | --------- | ----  | ----- | ---- |----  | -------------------------| ------ |
 | 2         | 1     |       | boot | 320M |/mnt/boot                 | vfat   |
-| 2         | 2     | proc  | root | 13G  |/mnt                      | ext4   |
-| 2         | 3     | proc  | opts | 10G  |/mnt/opt                  | ext4   |
-| 2         | 4     | proc  | vars | 5G   |/mnt/var                  | ext4   |
-| 2         | 5     | proc  | libs | 1G   |/mnt/var/usr/             | ext4   |
-| 2         | 6     | proc  | vlog | 1G   |/mnt/var/log              | ext4   |
-| 2         | 7     | proc  | vaud | 512M |/mnt/var/log/audit        | ext4   |
-| 2         | 8     | proc  | vpac | 2G   |/mnt/var/cache/pacman     | ext4   |
-| 2         | 9     | proc  | ring | 512M |                          | ext4   |
-| 2         | 11    | proc  | vtmp | 2G   |/mnt/var/tmp              | ext4   |
-
-#### minimum disk layout root  ram 2GB
-| partition | list  | group | name | size | mount                    | format |
-| --------- | ----  | ----- | ---- |----  | -------------------------| ------ |
-| 2         | 1     |       | boot | 320M |/mnt/boot                 | vfat   |
-| 2         | 2     | proc  | root | 13G  |/mnt                      | ext4   |
-| 2         | 3     | proc  | opts | 10G  |/mnt/opt                  | ext4   |
-| 2         | 4     | proc  | vars | 5G   |/mnt/var                  | ext4   |
-| 2         | 5     | proc  | libs | 1G   |/mnt/var/usr/             | ext4   |
-| 2         | 6     | proc  | vlog | 1G   |/mnt/var/log              | ext4   |
-| 2         | 7     | proc  | vaud | 512M |/mnt/var/log/audit        | ext4   |
-| 2         | 8     | proc  | vpac | 2G   |/mnt/var/cache/pacman     | ext4   |
-| 2         | 9     | proc  | ring | 512M |                          | ext4   |
-| 2         | 10    | proc  | temp | 1G   |/mnt/tmp                  | ext4   |
-| 2         | 11    | proc  | vtmp | 2G   |/mnt/var/tmp              | ext4   |
-
-#### data disk group
-| partition | list | group | name |  mount                       | format |
-| --------- | ---- | ----- | ---- | ---------------------------- | ------ |
-| 2         | 1    | data  | home |  /mnt/home                   | ext4   |
+| 2         | 2     | proc  | root | 10G  |/mnt                      | ext4   |
+| 2         | 3     | proc  | opts | 15G  |/mnt/opt                  | ext4   |
+| 2         | 4     | proc  | vars | 2G   |/mnt/var                  | ext4   |
+| 2         | 5     | proc  | libs | 512M |/mnt/var/usr/             | ext4   |
+| 2         | 6     | proc  | game | 512M | /mnt/var/games/          | ext4   |
+| 2         | 7     | proc  | vlog | 1G   |/mnt/var/log              | ext4   |
+| 2         | 8     | proc  | vaud | 256M |/mnt/var/log/audit        | ext4   |
+| 2         | 9     | proc  | vtmp | 2G   |/mnt/var/tmp              | ext4   |
+| 2         | 10    | proc  | vpac | 2G   |/mnt/var/cache/pacman     | ext4   |
+| 2         | 11    | proc  | ring | 512M |                          | ext4   |
+| 2         | 12    | proc  | docs | 2G   | /mnt/srv/http            | ext4   |
 
 ```
 pvcreate /dev/mapper/proc 
 ```
-
 ```
 vgcreate proc /dev/mapper/proc
 ```
@@ -100,7 +87,7 @@ vgcreate data /dev/mapper/data
 
 ### root
 ```
-lvcreate -L [ size in G | M ] proc -n root
+lvcreate -L 10G proc -n root
 ```
 ```
 mkfs.ext4 -b 4096 /dev/proc/root
@@ -120,7 +107,7 @@ mount -o uid=0,gid=0,fmask=0077,dmask=0077 [ path boot partition ] /mnt/boot
 ```
 ### opts
 ```
-lvcreate -L [ size in G | M ] proc -n opts
+lvcreate -L 15G proc -n opts
 ```
 ```
 mkfs.ext4 -b 4096 /dev/proc/opts
@@ -133,7 +120,7 @@ mount -o rw,nodev,nosuid,relatime /dev/proc/opts /mnt/opt
 ```
 ### vars
 ```
-lvcreate -L [ size in G | M ] proc -n vars
+lvcreate -L 2G proc -n vars
 ```
 ```
 mkfs.ext4 -b 4096 /dev/proc/vars
@@ -146,7 +133,7 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vars /mnt/var
 ```
 ### libs
 ```
-lvcreate -L [ size in G | M ] proc -n libs
+lvcreate -L 512M proc -n libs
 ```
 ```
 mkfs.ext4 -b 4096 /dev/proc/libs
@@ -157,9 +144,22 @@ mkdir /mnt/var/usr
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/libs /mnt/var/usr
 ```
+### game
+```
+lvcreate -L 512M proc -n game
+```
+```
+mkfs.ext4 -b 4096 /dev/proc/game
+```
+```
+mkdir /mnt/var/games
+```
+```
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/game /mnt/var/games
+```
 ### vlog
 ```
-lvcreate -L [ size in G | M ] proc -n vlog
+lvcreate -L 1G proc -n vlog
 ```
 ```
 mkfs.ext4 -b 4096 /dev/proc/vlog
@@ -172,7 +172,7 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vlog /mnt/var/log
 ```
 ### vaud
 ```
-lvcreate -L [ size in G | M ] proc -n vaud
+lvcreate -L 256M proc -n vaud
 ```
 ```
 mkfs.ext4 -b 4096 /dev/proc/vaud
@@ -183,9 +183,22 @@ mkdir /mnt/var/log/audit
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vaud /mnt/var/log/audit
 ```
+### vtmp
+```
+lvcreate -L 2G proc -n vtmp
+```
+```
+mkfs.ext4 -b 4096 /dev/proc/vtmp
+```
+```
+mkdir /mnt/var/tmp
+```
+```
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vtmp /mnt/var/tmp
+```
 ### vpac
 ```
-lvcreate -L [ size in G | M ] proc -n vpac
+lvcreate -L 2G proc -n vpac
 ```
 ```
 mkfs.ext4 -b 4096 /dev/proc/vpac
@@ -198,7 +211,7 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vpac /mnt/var/cache/pacman
 ```
 ### ring
 ```
-lvcreate -L [ size in G | M ] proc -n ring
+lvcreate -L 512M proc -n ring
 ```
 ```
 cryptsetup luksFormat --sector-size=4096 /dev/proc/ring
@@ -209,35 +222,22 @@ cryptsetup luksOpen /dev/proc/ring proc_keys
 ```
 mkfs.ext4 -b 4096 /dev/mapper/proc_keys
 ```
-### temp
+### docs
 ```
-lvcreate -L [ size in G | M ] proc -n temp
-```
-```
-mkfs.ext4 -b 4096 /dev/proc/temp
+lvcreate -l100%FREE proc -n docs
 ```
 ```
-mkdir /mnt/tmp
+mkfs.ext4 -b 4096 /dev/proc/docs
 ```
 ```
-mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/temp /mnt/tmp
-```
-### vtmp
-```
-lvcreate -l 100%FREE proc -n vtmp
+mkdir -p /mnt/srv /mnt/srv/http
 ```
 ```
-mkfs.ext4 -b 4096 /dev/proc/vtmp
-```
-```
-mkdir /mnt/var/tmp
-```
-```
-mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vtmp /mnt/var/tmp
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/docs /mnt/srv/http
 ```
 ### home
 ```
-lvcreate -l100%FREE data -n home
+lvcreate -L [ size in G | M ] data -n home
 ```
 ```
 mkfs.ext4 -b 4096 /dev/data/home
@@ -251,11 +251,11 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/data/home /mnt/home
 # 2. instalation package
 for intel
 ```
-pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd ethtool linux-hardened linux-firmware mkinitcpio intel-ucode libpwquality cracklib less bubblewrap-suid irqbalance reflector tuned tuned-ppd
+pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd  tang clevis mkinitcpio-nfs-utils luksmeta ethtool linux-hardened linux-firmware mkinitcpio intel-ucode libpwquality cracklib less bubblewrap-suid irqbalance reflector tuned tuned-ppd libpam-google-authenticator firewalld apparmor sof-firmware qrencode rsync grsync nginx prometheus prometheus-node-exporter 
 ```
 for amd
 ```
-pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd ethtool linux-hardened linux-firmware mkinitcpio amd-ucode libpwquality cracklib less bubblewrap-suid irqbalance reflector tuned tuned-ppd
+pacstrap /mnt base base-devel neovim lvm2 openssh polkit git iptables-nft iwd  tang clevis mkinitcpio-nfs-utils luksmeta ethtool linux-hardened linux-firmware mkinitcpio amd-ucode libpwquality cracklib less bubblewrap-suid irqbalance reflector tuned tuned-ppd libpam-google-authenticator firewalld apparmor sof-firmware qrencode rsync grsync prometheus prometheus-node-exporter nginx
 ```
 ### network configuration
 ```
@@ -270,6 +270,15 @@ cp /etc/systemd/network/* /mnt/etc/systemd/network/
 ### fstab
 ```
 genfstab -U /mnt > /mnt/etc/fstab
+```
+```
+echo "" >> /mnt/etc/fstab 
+```
+```
+echo "# /dev/mapper/proc-temp" >> /mnt/etc/fstab
+```
+```
+echo "tmpfs     					/tmp        		tmpfs   defaults,rw,nosuid,nodev,noexec,relatime,size=256M" >> /mnt/etc/fstab
 ```
 ### chrooting
 ```
@@ -376,16 +385,38 @@ exit
 ```
 ### system user
 ```
-useradd -m loki
+echo 'loki ALL=(ALL:ALL) ALL' >> /etc/sudoers.d/01_loki
+```
+```
+useradd -d /var/usr loki
+```
+```
+chown -R loki:loki /var/usr
 ```
 ```
 passwd loki
 ```
 ```
-echo "loki ALL=(ALL:ALL) ALL" > /etc/sudoers.d/00_nama_user
+su loki
 ```
 ```
-su nama_user
+cd ~
+```
+```
+mkdir /var/usr/.ssh
+```
+```
+nvim /var/usr/.ssh/authorized_keys
+```
+input public keys loki
+```
+chmod 700 .ssh/
+```
+```
+chmod 600 .ssh/authorized_keys
+```
+```
+sudo chattr +i .ssh/authorized_keys
 ```
 ```
 sudo su
@@ -396,7 +427,23 @@ exit
 ```
 exit
 ```
-
+```
+useradd -d /var/games -u 50 -g games games
+```
+```
+cat /etc/passwd | grep games
+```
+output
+```
+games:x:50:50::/var/games:/usr/bin/nologin
+```
+```
+passwd -l games
+```
+```
+nvim /etc/passwd
+```
+pastikan line `games` dibawah `nobody` dan `/usr/bin/nologin`
 ### skel
 
 ```
@@ -472,6 +519,73 @@ tar -xf /tmp/eggs/pkg.tar.xz -C /usr/share/icons/
 ```
 tar -xf /tmp/eggs/pkg.tar.xz -C /etc/skel/.icons/
 ```
+### hook clevis
+```
+su loki
+```
+```
+git clone https://aur.archlinux.org/mkinitcpio-clevis-hook.git 
+```
+```
+cd mkinitcpio-clevis-hook
+```
+```
+makepkg -si
+```
+```
+clevis luks bind -d /dev/nvme0n1p3 tang '{"url":"http://10.10.1.2:51379"}'
+```
+```
+clevis luks bind -d /dev/nvme0n1p3 tang '{"url":"http://10.10.1.10:51379"}'
+```
+```
+clevis luks bind -d /dev/nvme0n1p3 tang '{"url":"http://10.10.1.11:51379"}'
+```
+```
+clevis luks bind -d /dev/nvme0n1p3 tang '{"url":"http://10.10.1.13:51379"}'
+```
+```
+clevis luks bind -d /dev/nvme0n1p3 tang '{"url":"http://10.10.1.14:51379"}'
+```
+```
+clevis luks bind -d /dev/nvme0n1p3 tang '{"url":"http://10.10.1.15:51379"}'
+```
+```
+clevis luks bind -d /dev/nvme0n1p4 tang '{"url":"http://10.10.1.2:51379"}'
+```
+```
+clevis luks bind -d /dev/nvme0n1p4 tang '{"url":"http://10.10.1.10:51379"}'
+```
+```
+clevis luks bind -d /dev/nvme0n1p4 tang '{"url":"http://10.10.1.11:51379"}'
+```
+```
+clevis luks bind -d /dev/nvme0n1p4 tang '{"url":"http://10.10.1.13:51379"}'
+```
+```
+clevis luks bind -d /dev/nvme0n1p4 tang '{"url":"http://10.10.1.14:51379"}'
+```
+```
+clevis luks bind -d /dev/nvme0n1p4 tang '{"url":"http://10.10.1.15:51379"}'
+```
+```
+systemctl enable clevis-luks-askpass.path
+```
+### tang server
+```
+systemctl enable tangd.socket
+```
+```
+mkdir /etc/systemd/system/tangd.socket.d
+```
+```
+nvim /etc/systemd/system/tangd.socket.d/override.conf
+```
+```
+[Socket]
+ListenStream=
+ListenStream=51379 
+```
 ### firewelld
 
 ```
@@ -486,6 +600,12 @@ nvim /usr/lib/firewalld/zones/home.xml
 ```
 nvim /usr/lib/firewalld/zones/internal.xml 
 ```
+```
+nvim /usr/lib/firewalld/zones/dmz.xml 
+```
+```
+nvim /usr/lib/firewalld/zones/work.xml 
+```
  
 delete semua service 
 
@@ -497,7 +617,6 @@ delete semua service selain ssh,dan tamahkan
 ```
   <port protocol="tcp" port="51379"/>
 ```
-
 ```
   <port protocol="tcp" port="9090"/>
 ```
@@ -587,6 +706,9 @@ nvim /etc/ssh/sshd_config
 # Include drop-in configurations
 Include /etc/ssh/sshd_config.d/*.conf
 
+PubkeyAuthentication yes
+PasswordAuthentication yes
+
 Protocol 2
 
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
@@ -609,7 +731,7 @@ X11Forwarding no
 #Subsystem	sftp	/usr/lib/ssh/sftp-server
 ```
 ```
-systemctl enable ssh
+systemctl enable sshd
 ```
 
 
@@ -813,10 +935,10 @@ systemctl enable update.timer
 ```
 ## prometheus 
 ```
-sudo systemctl enable prometheus.service
+systemctl enable prometheus.service
 ```
 ```
-sudo systemctl enable prometheus-node-exporter.service
+systemctl enable prometheus-node-exporter.service
 ```
 
 ### configuration
@@ -849,7 +971,7 @@ scrape_configs:
 systemctl enable irqbalance
 ```
 ```
-mkdir -p /usr/lib/systemd/irqbalance.service.d/
+mkdir -p /usr/lib/systemd/system/irqbalance.service.d/
 ```
 ```
 cat > /usr/lib/systemd/system/irqbalance.service.d/10-no-private-users.conf <<EOF
@@ -865,21 +987,31 @@ systemctl enable tuned
 systemctl enable tuned-ppd.service
 ```
 
-output: througput-performance
+output: balance
 
 ### network
+#### nginx
+```
+systemctl enable nginx
+```
+### network
+```
+nvim /etc/systemd/network/20-ethernet.network
+```
+```
+[Network]
+Address=[IP]/24
+Gateway=10.10.1.1
+DNS=1.1.1.1 8.8.8.8
+MulticastDNS=yes
+```
 ```
 systemctl enable systemd-networkd
 ```
 ```
 systemctl enable systemd-resolved
 ```
-```
-systemctl enable sshd
-```
-```
-systemctl enable iwd
-```
+
 ### boot directory
 #### intel server
 ```
@@ -916,7 +1048,9 @@ mkdir /boot/kernel
 mv /boot/amd-ucode.img /boot/vmlinuz-linux-hardened /boot/kernel
 ```
 ### kernel parameter
-
+```
+echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/50-bubblewrap.conf
+```
 ```
 mkdir /etc/cmdline.d
 ```
@@ -925,7 +1059,7 @@ touch /etc/cmdline.d/{01-boot.conf,02-mods.conf,03-secs.conf,04-perf.conf,05-net
 ```
 ### 01-boot
 ```
-echo "rd.luks.uuid=$(blkid -s UUID -o value /dev/partisi_root) root=/dev/proc/root" > /etc/cmdline.d/01-boot.conf
+echo "cryptdevice=UUID=$(blkid -s UUID -o value /dev/nvme0n1p3):proc root=/dev/proc/root" > /etc/cmdline.d/01-boot.conf
 ```
 
 ### 03-secs
@@ -937,6 +1071,15 @@ echo "lsm=landlock,lockdown,yama,integrity,apparmor,bpf lockdown=integrity init_
 ```
 echo "ipv6.disable=1" > /etc/cmdline.d/04-perf.conf
 ```
+### 05-nets
+```
+echo "ip=(ip address)::10.10.1.1:255.255.255.0::eth0:none nameserver=10.10.1.1 nameserver=1.1.1.1 nameserver=8.8.8.8 nameserver=1.0.0.1 nameserver=8.8.4.4 nameserver=9.9.9.9 nameserver=149.112.112.112 " > /etc/cmdline.d/05-nets.conf
+```
+```
+nvim /etc/cmdline.d/05-nets.conf
+```
+lalu ubah ip address
+
 ### 06-misc
 
 ```
@@ -945,7 +1088,7 @@ echo "rw quiet" > /etc/cmdline.d/06-misc.conf
 
 ## cryptab
 ```
-echo "data UUID=$(blkid -s UUID -o value /dev/partisi_data) none" >> /etc/crypttab
+echo "data UUID=$(blkid -s UUID -o value /dev/nvme0n1p4) none" >> /etc/crypttab
 ```
 ### initram directory
 
@@ -964,7 +1107,7 @@ HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont bl
 ```
 tambahkan
 ```
-HOOKS=(base systemd autodetect microcode modconf kms keyboard keymap consolefont sd-vconsole sd-encrypt lvm2 block filesystems fsck)
+HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont net clevis encrypt lvm2 block filesystems fsck)
 ```
 tambahkan pada bagian binaries
 ```
@@ -1023,10 +1166,7 @@ mkinitcpio -P
 ```
 ### recovery
 ```
-curl --output recovery.efi https://boot.netboot.xyz/ipxe/netboot.xyz.efi
-```
-```
-mv recovery.efi /boot/efi/rescue/
+curl --output /boot/efi/rescue/recovery.efi https://boot.netboot.xyz/ipxe/netboot.xyz.efi
 ```
 ```
 printf "title recovery\nefi /efi/rescue/recovery.efi" > /boot/loader/entries/recovery.conf
@@ -1034,6 +1174,18 @@ printf "title recovery\nefi /efi/rescue/recovery.efi" > /boot/loader/entries/rec
 ```
 cat /boot/loader/entries/recovery.conf
 ```
+### wake on lan
+
+```
+nvim /etc/udev/rules.d/81-wol.rules
+```
+```
+ACTION=="add", SUBSYSTEM=="net", NAME=="en*", RUN+="/usr/bin/ethtool -s $name wol g"
+```
+```
+ethtool interface | grep Wake-on
+```
+
 ### instrusion detection
 
 ```
@@ -1070,7 +1222,7 @@ ConditionACPower=true
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/aide --check
+ExecStart=/usr/local/bin/aide --check
 
 [Install]
 WantedBy=multi-user.target
@@ -1080,14 +1232,17 @@ nvim /etc/systemd/system/aide.timer
 ```
 ```
 [Unit]
-Description=Aide check every day at 5AM
+Description=Aide check every 2 Hours
 
 [Timer]
-OnCalendar=*:0/8:00
+OnCalendar=*:0/2:00
 Unit=aidecheck.service
 
 [Install]
 WantedBy=multi-user.target
+```
+```
+systemctl enable aide.timer
 ```
 ```
 mkdir -p /var/log/aide
@@ -1370,7 +1525,7 @@ passwd -l root
 #### installation
 
 ```
-sudo pacman -S uwsm hyprland hyprpolkitagent hypridle hyprlock xdg-desktop-portal-hyprland pipewire pipewire-pulse pipewire-jack wireplumber pavucontrol kitty qt5-wayland qt6-wayland ttf-jetbrains-mono-nerd ttf-droid btop nautilus nautilus-image-converter sushi mako waybar wofi wl-clipboard cliphist mailcap hyprshot gnome-keyring libsecret brightnessctl hyprpicker flatpak gnome-software hugo go  --noconfirm
+sudo pacman -S uwsm hyprland hyprpolkitagent hypridle hyprlock xdg-desktop-portal-hyprland pipewire pipewire-pulse pipewire-jack wireplumber pavucontrol kitty qt5-wayland qt6-wayland ttf-jetbrains-mono-nerd ttf-droid btop nautilus nautilus-image-converter sushi mako waybar wofi wl-clipboard cliphist mailcap hyprshot gnome-keyring libsecret brightnessctl hyprpicker flatpak gnome-software hugo go --noconfirm
 ```
 #### service
 
