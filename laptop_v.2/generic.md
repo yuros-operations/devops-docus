@@ -352,6 +352,81 @@ nvim /etc/vconsole.conf
 FONT=lat2-16
 FONT_MAP=8859-2
 ```
+### skel
+
+```
+mkdir /etc/skel/.config
+```
+
+```
+git clone https://github.com/blackbird-package/skel /tmp/skel
+```
+```
+mv /tmp/skel/skels/* /etc/skel/.config
+```
+
+```
+rm /etc/profile /etc/bash.bashrc
+```
+
+```
+cp /tmp/skel/profile /tmp/skel/bash.bashrc /etc/
+```
+
+```
+git clone https://github.com/blackbird-package/conf.git /tmp/conf
+```
+
+```
+ mv /tmp/conf/cfg/etc/skel/.local/ /etc/skel/
+```
+
+### themes
+
+#### installation
+
+```
+git clone https://github.com/blackbird-package/flow.git /tmp/flow
+```
+
+#### configuration
+
+```
+mkdir /usr/share/themes
+```
+
+```
+ mkdir /etc/skel/.themes
+```
+
+```
+ tar -xf /tmp/flow/pkg.tar.xz -C /usr/share/themes/
+```
+
+```
+ tar -xf /tmp/flow/pkg.tar.xz -C /etc/skel/.themes/
+```
+
+
+### icons
+
+```
+ git clone https://github.com/blackbird-package/eggs.git /tmp/eggs
+```
+
+#### configuration
+
+```
+mkdir /etc/skel/.icons
+```
+
+```
+tar -xf /tmp/eggs/pkg.tar.xz -C /usr/share/icons/
+```
+
+```
+tar -xf /tmp/eggs/pkg.tar.xz -C /etc/skel/.icons/
+```
 ### operational user
 ```
 rm /etc/skel/.bash_profile
@@ -444,81 +519,7 @@ passwd -l games
 nvim /etc/passwd
 ```
 pastikan line `games` dibawah `nobody` dan `/usr/bin/nologin`
-### skel
 
-```
-mkdir /etc/skel/.config
-```
-
-```
-git clone https://github.com/blackbird-package/skel /tmp/skel
-```
-```
-mv /tmp/skel/skels/* /etc/skel/.config
-```
-
-```
-rm /etc/profile /etc/bash.bashrc
-```
-
-```
-cp /tmp/skel/profile /tmp/skel/bash.bashrc /etc/
-```
-
-```
-git clone https://github.com/blackbird-package/conf.git /tmp/conf
-```
-
-```
- mv /tmp/conf/cfg/etc/skel/.local/ /etc/skel/
-```
-
-### themes
-
-#### installation
-
-```
-git clone https://github.com/blackbird-package/flow.git /tmp/flow
-```
-
-#### configuration
-
-```
-mkdir /usr/share/themes
-```
-
-```
- mkdir /etc/skel/.themes
-```
-
-```
- tar -xf /tmp/flow/pkg.tar.xz -C /usr/share/themes/
-```
-
-```
- tar -xf /tmp/flow/pkg.tar.xz -C /etc/skel/.themes/
-```
-
-
-### icons
-
-```
- git clone https://github.com/blackbird-package/eggs.git /tmp/eggs
-```
-
-#### configuration
-
-```
-mkdir /etc/skel/.icons
-```
-
-```
-tar -xf /tmp/eggs/pkg.tar.xz -C /usr/share/icons/
-```
-
-```
-tar -xf /tmp/eggs/pkg.tar.xz -C /etc/skel/.icons/
-```
 ### hook clevis
 ```
 su loki
