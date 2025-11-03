@@ -584,7 +584,7 @@ nvim /etc/systemd/system/tangd.socket.d/override.conf
 ```
 [Socket]
 ListenStream=
-ListenStream=51379 
+ListenStream=7500 
 ```
 ### firewelld
 
@@ -615,7 +615,7 @@ nvim /usr/lib/firewalld/zones/public.xml
 
 delete semua service selain ssh,dan tamahkan
 ```
-  <port protocol="tcp" port="51379"/>
+  <port protocol="tcp" port="7500"/>
 ```
 ```
   <port protocol="tcp" port="9090"/>
