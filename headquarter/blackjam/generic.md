@@ -56,7 +56,7 @@ vgcreate proc /dev/mapper/proc
 pvcreate /dev/mapper/data
 ```
 ```
-vgcreate proc /dev/mapper/data
+vgcreate data /dev/mapper/data
 ```
 ### root
 ```
