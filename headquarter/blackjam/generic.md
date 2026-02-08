@@ -7,7 +7,7 @@
 | ---- | --------- | ----------------- | ----- | ----- | -------- | --------- | ------ | -------------------------- |
 | 0    | 1         | efi               | false | false | boot     | 320M      | fat 32 | /boot                      |
 | 0    | 2         | linux server data | true  | false | keys     | 256M      | luks   | none                       |
-| 0    | 3         | linux file system | true  | true  | proc     | 22G       | luks   | see logical layout point 1 |
+| 0    | 3         | linux file system | true  | true  | proc     | 30G       | luks   | see logical layout point 1 |
 | 0    | 4         | linux server data | true  | true  | data     | 100% Free | luks   | see logical layout point 1 |
 
 gunakan cfdisk untuk membuat physical volume sesuai dengan guide line
