@@ -35,16 +35,22 @@ cryptsetup luksOpen /dev/nvme0n1p4 data
 
 ## logical volume
 
-### disk layout
+### disk layout proc
 | partition | list | group  | name | size | mount                 | format |
 | --------- | ---- | ------ | ---- | ---- | --------------------- | ------ |
-| 2         | 1    | proc   | root | 5G   | /mnt                  | ext4   |
-| 2         | 2    | proc   | vars | 3G   | /mnt/var              | ext4   |
-| 2         | 3    | proc   | vlog | 2G   | /mnt/var/log/         | ext4   |
-| 2         | 4    | proc   | vaud | 1G   | /mnt/var/log/audit    | ext4   |
-| 2         | 5    | proc   | vtmp | 512M | /mnt/var/tmp/         | ext4   |
-| 2         | 6    | proc   | vpac | 2G   | /mnt/var/cache/pacman | ext4   |
-| 2         | 7    | proc   | ring | 512M |                       | luks   |
+| 3         | 1    | proc   | root | 5G   | /mnt                  | ext4   |
+| 3         | 2    | proc   | vars | 3G   | /mnt/var              | ext4   |
+| 3         | 3    | proc   | vlog | 2G   | /mnt/var/log/         | ext4   |
+| 3         | 4    | proc   | vaud | 1G   | /mnt/var/log/audit    | ext4   |
+| 3         | 5    | proc   | vtmp | 512M | /mnt/var/tmp/         | ext4   |
+| 3         | 6    | proc   | vpac | 2G   | /mnt/var/cache/pacman | ext4   |
+| 3         | 7    | proc   | temp | 8G   | /mnt/tmp              | ext4   |
+
+### disk layout data
+| partition | list | group  | name | size     | mount                 | format |
+| --------- | ---- | ------ | ---- | -------- | --------------------- | ------ |
+| 4         | 1    | data   | ring | 512M     |                       | luks   |
+| 4         | 2    | data   | home | 100%free | /mnt/home             | ext4   |
 
 ```
 pvcreate /dev/mapper/proc
