@@ -933,29 +933,6 @@ bootctl --path=/boot install
 ```
 mkinitcpio -P
 ```
-
-### recovery
-```
-curl --output /boot/efi/rescue/recovery.efi https://boot.netboot.xyz/ipxe/netboot.xyz.efi
-```
-```
-printf "title recovery\nefi /efi/rescue/recovery.efi" > /boot/loader/entries/recovery.conf
-```
-```
-cat /boot/loader/entries/recovery.conf
-```
-### wake on lan
-
-```
-nvim /etc/udev/rules.d/81-wol.rules
-```
-```
-ACTION=="add", SUBSYSTEM=="net", NAME=="en*", RUN+="/usr/bin/ethtool -s $name wol g"
-```
-```
-ethtool interface | grep Wake-on
-```
-
 ### instrusion detection
 
 ```
