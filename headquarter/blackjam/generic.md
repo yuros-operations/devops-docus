@@ -42,7 +42,7 @@ cryptsetup luksOpen /dev/nvme0n1p4 data
 | 3         | 2    | proc   | vars | 3G   | /mnt/var              | ext4   |
 | 3         | 3    | proc   | vlog | 2G   | /mnt/var/log/         | ext4   |
 | 3         | 4    | proc   | vaud | 1G   | /mnt/var/log/audit    | ext4   |
-| 3         | 5    | proc   | vtmp | 512M | /mnt/var/tmp/         | ext4   |
+| 3         | 5    | proc   | vtmp | 1g   | /mnt/var/tmp/         | ext4   |
 | 3         | 6    | proc   | vpac | 2G   | /mnt/var/cache/pacman | ext4   |
 | 3         | 7    | proc   | temp | 8G   | /mnt/tmp              | ext4   |
 
