@@ -319,7 +319,7 @@ echo 'user ALL=(ALL:ALL) ALL' > /etc/sudoers.d/nologin
 ```
 ### hook clevis
 ```
-su loki
+su user
 ```
 ```
 git clone https://aur.archlinux.org/mkinitcpio-clevis-hook.git 
