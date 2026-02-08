@@ -756,12 +756,12 @@ EOF
 systemctl enable tuned
 ```
 ```
-tuned-adm profile througput-performance
+tuned-adm profile throughput-performance
 ```
 ```
 tuned-adm active
 ```
-output: througput-performance
+output: throughput-performance
 
 #### nginx
 ```
@@ -773,7 +773,7 @@ nvim /etc/systemd/network/20-ethernet.network
 ```
 ```
 [Network]
-Address=[IP]/24
+Address=10.10.1.17/24
 Gateway=10.10.1.1
 DNS=1.1.1.1 8.8.8.8
 MulticastDNS=yes
