@@ -152,20 +152,47 @@ mkdir -p /mnt/var/cache /mnt/var/cache/pacman
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vpac /mnt/var/cache/pacman
 ```
+
+### temp
+```
+lvcreate -L 8G proc -n temp
+```
+```
+mkfs.ext4 -b 4096 /dev/proc/temp
+```
+```
+mkdir /mnt/tmp
+```
+```
+mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/temp /mnt/tmp
+```
+
 ### ring
 ```
-lvcreate -L 512M proc -n ring
+lvcreate -L 512M data -n ring
 ```
 ```
-cryptsetup luksFormat --sector-size=4096 /dev/proc/ring
+cryptsetup luksFormat --sector-size=4096 /dev/data/ring
 ```
 ```
-cryptsetup luksOpen /dev/proc/ring lvm_keys
+cryptsetup luksOpen /dev/data/ring lvm_keys
 ```
 ```
 mkfs.ext4 -b 4096 /dev/mapper/lvm_keys
 ```
-
+### home
+```
+lvcreate -l100%FREE data -n home
+```
+```
+mkfs.ext4 -b 4096 /dev/data/home
+```
+```
+mkdir /mnt/home
+```
+```
+mount -o rw,nodev,noexec,nosuid,relatime /dev/data/home /mnt/home
+```
 # 2.installation
 
 
