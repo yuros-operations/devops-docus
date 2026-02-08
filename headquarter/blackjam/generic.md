@@ -46,12 +46,6 @@ cryptsetup luksOpen /dev/nvme0n1p4 data
 | 3         | 6    | proc   | vpac | 2G   | /mnt/var/cache/pacman | ext4   |
 | 3         | 7    | proc   | temp | 8G   | /mnt/tmp              | ext4   |
 
-### disk layout data
-| partition | list | group  | name | size     | mount                 | format |
-| --------- | ---- | ------ | ---- | -------- | --------------------- | ------ |
-| 4         | 1    | data   | ring | 512M     |                       | luks   |
-| 4         | 2    | data   | home | 100%free | /mnt/home             | ext4   |
-
 ```
 pvcreate /dev/mapper/proc
 ```
@@ -166,6 +160,12 @@ mkdir /mnt/tmp
 ```
 mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/temp /mnt/tmp
 ```
+
+### disk layout data
+| partition | list | group  | name | size     | mount                 | format |
+| --------- | ---- | ------ | ---- | -------- | --------------------- | ------ |
+| 4         | 1    | data   | ring | 512M     |                       | luks   |
+| 4         | 2    | data   | home | 100%free | /mnt/home             | ext4   |
 
 ### ring
 ```
