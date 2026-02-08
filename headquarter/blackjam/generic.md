@@ -845,12 +845,11 @@ echo "ipv6.disable=1" > /etc/cmdline.d/04-perf.conf
 ```
 ### 05-nets
 ```
-echo "ip=(ip address)::10.10.1.1:255.255.255.0::eth0:none nameserver=10.10.1.1 nameserver=1.1.1.1 nameserver=8.8.8.8 nameserver=1.0.0.1 nameserver=8.8.4.4 nameserver=9.9.9.9 nameserver=149.112.112.112 " > /etc/cmdline.d/05-nets.conf
+echo "ip=10.10.1.17::10.10.1.1:255.255.255.0::eth0:none nameserver=10.10.1.1 nameserver=1.1.1.1 nameserver=8.8.8.8 nameserver=1.0.0.1 nameserver=8.8.4.4 nameserver=9.9.9.9 nameserver=149.112.112.112 " > /etc/cmdline.d/05-nets.conf
 ```
 ```
 nvim /etc/cmdline.d/05-nets.conf
 ```
-lalu ubah ip address
 
 ### 06-misc
 
