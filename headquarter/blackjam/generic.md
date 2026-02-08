@@ -942,9 +942,6 @@ cd /tmp
 pkg-config --libs --cflags glib-2.0
 ```
 ```
-cd /dev/temp
-```
-```
 wget https://github.com/aide/aide/releases/download/v0.19.2/aide-0.19.2.tar.gz
 ```
 ```
