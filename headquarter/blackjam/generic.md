@@ -503,7 +503,7 @@ X11Forwarding no
 #Subsystem	sftp	/usr/lib/ssh/sftp-server
 ```
 ```
-systemctl enable ssh
+systemctl enable sshd
 ```
 
 
