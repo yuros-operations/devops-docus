@@ -122,7 +122,7 @@ mount -o rw,nodev,noexec,nosuid,relatime /dev/proc/vaud /mnt/var/log/audit
 ```
 ### vtmp
 ```
-lvcreate -L 512M proc -n vtmp
+lvcreate -L 1G proc -n vtmp
 ```
 ```
 mkfs.ext4 -b 4096 /dev/proc/vtmp
