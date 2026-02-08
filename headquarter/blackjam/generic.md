@@ -322,6 +322,9 @@ echo 'user ALL=(ALL:ALL) ALL' > /etc/sudoers.d/nologin
 su user
 ```
 ```
+cd home/user
+```
+```
 git clone https://aur.archlinux.org/mkinitcpio-clevis-hook.git 
 ```
 ```
