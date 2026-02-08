@@ -309,69 +309,14 @@ rm /etc/skel/.bashrc
 rm /etc/skel/.bash_logout
 ```
 ```
-echo 'loki ALL=(ALL:ALL) ALL' >> /etc/sudoers
+useradd -m user
 ```
 ```
-cat /etc/sudoers
+passwd user
 ```
 ```
-useradd -d /var/usr loki
+echo 'user ALL=(ALL:ALL) ALL' > /etc/sudoers.d/nologin
 ```
-```
-chown -R loki:loki /var/usr
-```
-```
-passwd loki
-```
-```
-su loki
-```
-```
-cd ~
-```
-```
-mkdir /var/usr/.ssh
-```
-```
-nvim /var/usr/.ssh/authorized_keys
-```
-input public keys loki
-```
-chmod 700 .ssh/
-```
-```
-chmod 600 .ssh/authorized_keys
-```
-```
-sudo chattr +i .ssh/authorized_keys
-```
-```
-sudo su
-```
-```
-exit
-```
-```
-exit
-```
-```
-useradd -d /var/games -u 50 -g games games
-```
-```
-cat /etc/passwd | grep games
-```
-output
-```
-games:x:50:50::/var/games:/usr/bin/nologin
-```
-```
-passwd -l games
-```
-```
-nvim /etc/passwd
-```
-pastikan line `games` dibawah `nobody`
-
 ### hook clevis
 ```
 su loki
