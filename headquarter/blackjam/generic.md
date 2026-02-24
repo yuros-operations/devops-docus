@@ -228,7 +228,7 @@ arch-chroot /mnt
 ## hostname
 
 ```
-echo 'nama_hostname' > /etc/hostname
+echo blackjam > /etc/hostname
 ```
 
 
